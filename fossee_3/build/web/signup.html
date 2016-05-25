@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>signup Form</title>
+        </head>
+    <body>
+        <script>
+            function validate(form)
+            {
+                if (form.gender[0].checked === true && form.gender[1].checked === true || form.gender[0].checked === false && form.gender[1].checked === false)
+                {
+                    alert("choose one");
+                    return false;
+                }
+                if(form.password[0].value!==form.password[1].value)
+                {
+                    alert("passwords aren't same");
+                    return false;
+                }
+                return true;
+            }
+        </script>
+            <div>
+                <h1>Signup</h1>
+                <form method="post" action="/fossee_3/signup" onsubmit="return validate(this)">
+                    
+                    <p>USERNAME:<input type="text" name="name" value="" placeholder="Username" ></p>
+                    <p>EMAIL:<input type="text" name="email" value="" placeholder="job@fossee.in"  ></p>
+                    <p>GENDER:<input type="checkbox" name="gender" value="ON" />male
+                    
+                    <input type="checkbox" name="gender" value="ON" />female
+                    </p>
+                    <p>DOB:<input type="text" name="dob" value="" placeholder="(yyyy/mm/dd)" ></p>
+
+                    <p>PASSWORD:<input type="password" name="password" value="" placeholder="Password"  ></p>
+                    <p>REPEAT PASSWORD:<input type="password" name="password" value="" placeholder="Password" ></p>                    <p><input type="submit" name="commit" value="Sign up"></p>
+                </form>
+            </div>
+        
+
+
+    </body>
+</html>
