@@ -8,13 +8,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLClassLoader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.scilab.modules.javasci.JavasciException;
-import org.scilab.modules.javasci.Scilab;
-import org.scilab.modules.types.ScilabInteger;
+
 
 /**
  *
@@ -36,34 +38,20 @@ public class ser1 extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            try {
-		Integer d1=Integer.parseInt(request.getParameter("no3"));
-                System.out.println(d1);
-		Scilab sci=(Scilab) request.getSession().getAttribute("scilab");
-                if(sci==null){
-                     sci = new Scilab();
-                     sci.open(new File("/home/anamika/ex1.sce"));
-                }
-		
-		System.out.println("YYAAAAYYY");
-		ScilabInteger s= new ScilabInteger(d1);
-		sci.put("a",s);
-		
-		sci.exec("y=memory(a)");
-                
-		ScilabInteger c=(ScilabInteger)(sci.get("y"));
-                ScilabInteger d=(ScilabInteger)(sci.get("var"));
-		sci.close();
-		System.out.println(c.getElement(0,0)+" "+d.getElement(0,0));
-		
-	} catch (JavasciException.InitializationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (JavasciException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} 
+            
+		Integer d1=Integer.parseInt(request.getParameter("no1"));
+                Integer d2=Integer.parseInt(request.getParameter("no2"));
+                //System.out.println(d1);
+		test sc=new test();
+                int b=sc.scilab(d1,d2);
+                out.println(b);
+		System.out.println(((URLClassLoader)(Thread.currentThread().getContextClassLoader())).getURLs());
 	
+	
+        } catch (JavasciException ex) {
+            Logger.getLogger(ser1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ser1.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
