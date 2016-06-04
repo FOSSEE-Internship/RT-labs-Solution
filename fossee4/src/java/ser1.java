@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.scilab.modules.javasci.JavasciException;
+import org.scilab.modules.javasci.Scilab;
 
 
 /**
@@ -35,17 +36,19 @@ public class ser1 extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/event-stream;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-		Integer d1=Integer.parseInt(request.getParameter("no1"));
-                Integer d2=Integer.parseInt(request.getParameter("no2"));
+		Integer d1=Integer.parseInt(request.getParameter("mypostvar"));
+                Integer d2=Integer.parseInt(request.getParameter("mypostvar1"));
                 //System.out.println(d1);
-		test sc=new test();
-                int b=sc.scilab(d1,d2);
-                out.println(b);
-		System.out.println(((URLClassLoader)(Thread.currentThread().getContextClassLoader())).getURLs());
+                PrintWriter writer = response.getWriter();
+      		test sc=new test();
+                Scilab sci=(Scilab) request.getSession().getAttribute("sci");
+                int b=sc.scilab(d1,d2,sci);
+                 writer.write("data: "+b+"\n\n");
+		
 	
 	
         } catch (JavasciException ex) {

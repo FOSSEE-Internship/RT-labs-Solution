@@ -1,3 +1,12 @@
+<%-- 
+    Document   : add
+    Created on : 3 Jun, 2016, 4:05:09 PM
+    Author     : root
+--%>
+
+<%@page import="org.scilab.modules.javasci.Scilab"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -114,12 +123,32 @@ and open the template in the editor.
         });
         
         </script>
-        
+        <%
+            Scilab sci=new Scilab();
+            session=request.getSession(true);
+            session.setAttribute("sci",sci);
+            
+            %>
         <script>
-            setInterval(start,5000);
+            setInterval(start,1000);
         </script>
-        
-        
+        <script>
+     window.onbeforeunload = function (event) {
+    if (event) {
+        //event.returnValue = message;
+        alert('session ends');
+        <%
+            Scilab scidead=(Scilab)(session.getAttribute("sci"));
+            
+            if(scidead!=null)
+            scidead.close();
+            session.invalidate();
+            
+            
+            %>
+    }
+};   
+        </script>
         
     </body>
 </html>

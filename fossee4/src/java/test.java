@@ -17,8 +17,8 @@ import org.scilab.modules.types.ScilabInteger;
  * @author root
  */
 public class test {
-    public int scilab(int d1,int d2) throws JavasciException.InitializationException, JavasciException, FileNotFoundException{
-    Scilab sci = new Scilab();
+    public int scilab(int d1,int d2,Scilab sci) throws JavasciException.InitializationException, JavasciException, FileNotFoundException{
+    
 		//sci.open();
 		int b=0;
 		try{
@@ -34,7 +34,7 @@ public class test {
 		sci.exec("y=add(a,b)");
 		ScilabInteger c=(ScilabInteger)(sci.get("y"));
 		b=c.getIntElement(0, 0);
-		sci.close();
+		//sci.close();
                 }
          return b;       
     }

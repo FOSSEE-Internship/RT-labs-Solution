@@ -12,22 +12,113 @@ and open the template in the editor.
           <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  
+  <style type="text/css">
+      #slider {
+    margin: 10px;
+}
+    #slider1 {
+    margin: 10px;
+}
+    .ui-slider .ui-slider-handle {
+    height: 15px;
+    width: 5px;
+    padding-left: 5px;
+}
+    .ui-slider-horizontal {
+    height: 8px;
+    width: 200px;
+}
+  </style>
+  <script>
+   function start(){
+        var eventSource = new EventSource("ser1");
+          var no1= $("#no1").val();
+          var no2 = $("#no2").val();
+          $.ajax({
+                url: "ser1",
+                type: 'GET',   
+                dataType: 'text',
+                data: {
+                    mypostvar: no1,
+                    mypostvar1: no2
+                },
+                
+                success: function (data) {
+        if(data){
+            if(data.split(":")[1]!==0.0)
+                   document.getElementById('msg').innerHTML=data.split(":")[1];
+               }
+                }
+                
+            });    
+      
+       
+    }
+   
+            
+</script>
   
   
     </head>
     <body>
          <h1>ADDITION VIA SCILAB</h1>
-         <form method="post" action="/fossee4/ser1">
-             NO1:<input name="no1" id ="no1">
-              NO2:  <input name="no2" id="no2"/> 
-                <input type="submit" value="GO"/>
+         <form method="post" >
+             NO1:<input id ="no1"><div id="slider"></div>
+              NO2:  <input id="no2"> <div id="slider1"></div>
+              
          </form>
          
         <h2 id="msg" ></h2>
          
 
-
+<script>
+  $(function() {
+    $( "#slider" ).slider({
+     orientation: "horizontal",
+    max: 100,
+    step: 1,
+    change: function(event, ui) {
+      $('#no1').attr('value', ui.value);
+    },
+    min: 0
+    });
+  });
+  $(function() {
+    $( "#slider1" ).slider({
+     orientation: "horizontal",
+    max: 100,
+     change: function(event, ui) {
+      $('#no2').attr('value', ui.value);
+    },
+    min: 0
+    });
+    
+  });
+  
+  </script>
+         <script type="text/javascript">
+            
+           $(document).ready(function(){ 
+               
+              $( "#slider" ).on( "slidechange", function( event,ui) {
+                  document.getElementById("no1").innerHTML= ui.value;
+                  
+              });
+              // document.getElementById("msg").innerHTML=document.getElementById("msg").value;
+           $( "#slider1" ).on( "slidechange", function( event,ui) {
+               
+                  document.getElementById("no2").innerHTML= ui.value;
+                  
+              });
+             
+        });
+        
+        </script>
+        
+        <script>
+            setInterval(start,5000);
+        </script>
+        
         
         
     </body>

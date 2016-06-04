@@ -41,8 +41,6 @@ public class ser extends HttpServlet {
             try {
 		
                 Integer d1=Integer.parseInt(request.getParameter("no1"));
-                
-                //System.out.println(d1);
 		test1 sc=new test1();
                 String b=sc.scilab(d1);
                 out.println(b);
