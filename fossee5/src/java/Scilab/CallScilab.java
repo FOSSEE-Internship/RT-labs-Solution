@@ -19,8 +19,8 @@ import org.scilab.modules.types.ScilabSparse;
  * @author root
  */
 public class CallScilab {
-    public int[] scilab(int setpoint,int fan,double temp ,Scilab sci) throws JavasciException.InitializationException, JavasciException, FileNotFoundException{
-		int[] b=new int[2];
+    public String[] scilab(int setpoint,int fan,double temp ,Scilab sci) throws JavasciException.InitializationException, JavasciException, FileNotFoundException{
+		String[] b=new String[3];
 		try{
 		sci.open(new File("/home/anamika/prop.sci"));
                 }
@@ -34,15 +34,23 @@ public class CallScilab {
 		sci.put("setpoint",scilab_setpoint);
 		sci.put("fan",scilab_fan);
                 sci.put("temp",scilab_temp);
-		//sci.exec("[x y]=sbhs(setpoint,fan,temp)");
-                //sci.exec("ans=[x y]");
-                
-                sci.exec("y=sbhs(setpoint,fan,temp)");
-		ScilabInteger c=(ScilabInteger) sci.get("y");
-                   b[0]=scilab_fan.getIntElement(0,0);
-                   b[1]=c.getIntElement(0, 0);
-                   
+                try{
+		sci.execException("[x y]=sbhs(setpoint,fan,temp)");
                 }
+                catch (org.scilab.modules.javasci.JavasciException e) {
+                System.err.println("An exception occurred: " + e.getLocalizedMessage());
+                b[1]=String.valueOf(-1);
+                b[0]=String.valueOf(-1);
+                b[2]=e.getLocalizedMessage();
+                return b;
+}
+		ScilabInteger c=(ScilabInteger) sci.get("y");
+                ScilabInteger d=(ScilabInteger) sci.get("x");
+                   b[0]=String.valueOf(c.getIntElement(0,0));
+                   b[1]=String.valueOf(d.getIntElement(0,0));
+                   b[2]=null;
+                }
+               
          return b;       
     }
 }

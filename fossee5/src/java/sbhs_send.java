@@ -35,6 +35,9 @@ public class sbhs_send extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        response.setContentType("text/event-stream;charset=UTF-8");
+        HttpSession session=request.getSession();
+        PrintWriter writer = response.getWriter();
+
     try (PrintWriter out = response.getWriter()) {       
             String portName=null;
         try
@@ -65,31 +68,51 @@ public class sbhs_send extends HttpServlet {
            
             Scilab sci = (Scilab) request.getSession().getAttribute("sci");
             CallScilab callsci=new CallScilab();
-            int b[]=callsci.scilab(d1, d2,c,sci);
-            if(b[1]>100){
-                b[1]=100;
+            String b[]=callsci.scilab(d1, d2,c,sci);
+             if(b[1].equals("-1")&&b[1].equals("-1")){
+                 ((Con) session.getAttribute("con")).disconnect();
+               ((Scilab) session.getAttribute("sci")).close();
+               ((PrintWriter)session.getAttribute("writerfile")).close();
+                session.removeAttribute("con");
+                session.removeAttribute("sci");
+                session.removeAttribute("check");
+                session.removeAttribute("writerfile");
+                session.removeAttribute("counter");
+              session.invalidate();
+               writer.write("data::"+b[2]+"::error");
+               return;
             }
-            else if(b[1]<0){
-                b[1]=0;
+            if(Integer.parseInt(b[1])>100){
+                b[1]="100";
             }
-            con.set(b[1],b[0]);
-             PrintWriter writer = response.getWriter();
-            writer.write("data: "+"Temp "+"- "+c+"\n\n"+"Heat"+"- "+b[1]+"\n\n");
-             HttpSession session=request.getSession();
+            else if(Integer.parseInt(b[1])<0){
+                b[1]="0";
+            }
+           
+            con.set(Integer.parseInt(b[1]),Integer.parseInt(b[0]));
+            writer.write("data:: "+"Temp "+"- "+c+"\n\n"+"Heat"+"- "+b[1]+"\n\n");
+            PrintWriter writerfile=(PrintWriter)(request.getSession().getAttribute("writerfile"));
+            int count=(int)request.getSession().getAttribute("counter");
+            count++;
+            request.getSession().setAttribute("counter",count);
+            writerfile.println(String.format("%4s %15s %8s %8s %8s\r\n",(count+"."), System.currentTimeMillis(),b[1],b[0],c));
+            
             System.out.println(System.currentTimeMillis()-session.getCreationTime());
             if(System.currentTimeMillis()-session.getCreationTime()>20000){
                ((Con) session.getAttribute("con")).disconnect();
                ((Scilab) session.getAttribute("sci")).close();
+               ((PrintWriter)session.getAttribute("writerfile")).close();
                 session.removeAttribute("con");
                 session.removeAttribute("sci");
                 session.removeAttribute("check");
+                session.removeAttribute("writerfile");
+                session.removeAttribute("counter");
               session.invalidate();
-               writer.write(":"+"done");
+               writer.write("::"+"done");
             }
             
           }
       }
-           // Thread.sleep(1000);
    }
         catch ( NumberFormatException | IOException | JavasciException e )
         {

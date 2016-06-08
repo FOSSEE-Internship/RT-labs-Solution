@@ -4,6 +4,11 @@
     Author     : root
 --%>
 
+<%@page import="java.io.File"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.io.PrintWriter"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.io.InputStreamReader"%>
 <%@page import="java.io.BufferedReader"%>
@@ -43,6 +48,32 @@ and open the template in the editor.
 }
   </style>
   <script>
+      window.onbeforeunload = function() {
+          
+    <%
+        if(session!=null){
+            if(((Con) session.getAttribute("con"))!=null) {
+                ((Con) session.getAttribute("con")).disconnect();
+            }
+            if(((Scilab) session.getAttribute("sci"))!=null){
+               ((Scilab) session.getAttribute("sci")).close();
+            }
+            if(((PrintWriter)session.getAttribute("writerfile"))!=null){
+               ((PrintWriter)session.getAttribute("writerfile")).close();
+            }
+                session.removeAttribute("con");
+                session.removeAttribute("sci");
+                session.removeAttribute("check");
+                session.removeAttribute("writerfile");
+                session.removeAttribute("counter");
+              session.invalidate();
+                
+        }
+        %>
+                return "hey";
+               
+};
+
    function start(){
       
         var eventSource = new EventSource("sbhs_send");
@@ -55,19 +86,22 @@ and open the template in the editor.
                 data: {
                     mypostvar: setpoint,
                     mypostvar1: fan
-                },
+ 
+            },
                 
                 success: function (data) {
-        if(data.split(":")[1]!==undefined){
-            if(data.split(":")[2]==="done"){
+        if(data.split("::")[1]!==undefined){
+            if(data.split("::")[2]==="done"){
                 window.location.href="reload.jsp";
                 document.getElementById('temp').innerHTML="experiment finished";
-                <%
-                    session.invalidate();
-                    %>
+                
+            }
+            else if(data.split("::")[2]==="error"){
+               
+                document.getElementById('temp').innerHTML=data.split("::")[1];
             }
             else
-                   document.getElementById('temp').innerHTML=data.split(":")[1];
+                   document.getElementById('temp').innerHTML=data.split("::")[1];
                 }
                 }
             });   
@@ -94,7 +128,10 @@ and open the template in the editor.
                <option value="3.5">3.500 secs</option>
            </select>
          </form>
-         
+         <button id="start">START</button>
+          <button id="stop">STOP</button>
+          <button id="pause">PAUSE</button>
+          
         <h2 id="temp" ></h2>
         <h2 id="heat"></h2>
          
@@ -145,6 +182,22 @@ and open the template in the editor.
             session.setAttribute("sci",sci);   
             Con c=new Con();
             session.setAttribute("con",c);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date();
+	    String tempName= dateFormat.format(date);
+            String nameFile[]=tempName.split(" ");
+            tempName=nameFile[0]+"-"+nameFile[1]+".txt";
+            int count=0;
+            session.setAttribute("counter", count);
+            File file = new File("/home/anamika/testlog/"+tempName);
+            System.out.println(file.getAbsolutePath());
+            if(!file.exists()) {
+                file.createNewFile();
+             } 
+            PrintWriter writer = new PrintWriter(file, "UTF-8");
+            session.setAttribute("writerfile",writer);
+            writer.write(String.format("%3s %15s %8s %8s %14s \r\n","NO.","TIMESTAMP","HEAT","FAN","TEMPERATURE"));
+            
             String portName=null;
             try{
                 
@@ -169,13 +222,16 @@ and open the template in the editor.
             System.out.println("connected");
         %>
         <script>
-        $("#itr").on("change",function(){ 
+            var myID=0;
+        $("#start").on("click",function(){ 
                
             if($("#itr").val()*1000!==0){
-            setInterval(start,($("#itr").val()*1000));
+            myID=setInterval(start,($("#itr").val()*1000));
         }
         });
-    
+    $("#pause").on("click",function(){ 
+               clearInterval(myID);
+        });
    
         </script>
     </body>
