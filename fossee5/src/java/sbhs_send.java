@@ -7,14 +7,14 @@
 
 import Comm.Con;
 import Scilab.CallScilab;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.scilab.modules.javasci.JavasciException;
 import org.scilab.modules.javasci.Scilab;
 
 /**
@@ -39,45 +39,60 @@ public class sbhs_send extends HttpServlet {
             String portName=null;
         try
         {
-        	try{
-                 String target1 = "/home/anamika/test.sh";
-                 Runtime rt = Runtime.getRuntime();
-                 Process proc1 = rt.exec(target1);
-                 proc1.waitFor();
-                 String output = new String();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
-                 String line = "";                       
-                 while ((line = reader.readLine())!= null) {
-                         output+=line;
-                 }
-                String[] port=output.split(" ");
-                portName=port[port.length-1];
-                  //  System.out.println(portName);
-         } catch (IOException | InterruptedException t) {
-                 t.printStackTrace();
-         }
-           // String setpoint = request.getParameter("mypostvar");
-            //String fan = request.getParameter("mypostvar1");
-            //Integer d1=Integer.parseInt(setpoint);
-            //Integer d2=Integer.parseInt(fan);
-            Con con= new Con();
-            int check=con.connect(portName);
+        	
+            String setpoint = request.getParameter("mypostvar");
+            String fan = request.getParameter("mypostvar1");
+            if(setpoint!=null&&fan!=null){
+            Integer d1=Integer.parseInt(setpoint);
+            Integer d2=Integer.parseInt(fan);
+             Con con=null;int check=0;  
+       try{
+            con = (Con) request.getSession().getAttribute("con");
+            check=(Integer)request.getSession().getAttribute("check");
+       }catch(NullPointerException e){
+           System.out.println("session null");
+       }
+            double c=0.0;
             if(check==1){
-            double c=con.readTemp();
+                try{
+                      c =con.readTemp();
+                }catch(IOException e){
+                    request.getSession().invalidate();
+           response.sendRedirect("/fossee5/reload.jsp");
+           return;
+                }
+                
+           
             Scilab sci = (Scilab) request.getSession().getAttribute("sci");
             CallScilab callsci=new CallScilab();
-            //callsci.scilab(d1, d2,c,sci);
-            con.disconnect();
-             PrintWriter writer = response.getWriter();
-            writer.write("data: "+c+"\n\n");
+            int b[]=callsci.scilab(d1, d2,c,sci);
+            if(b[1]>100){
+                b[1]=100;
             }
-           
-           // Thread.sleep(1000);
+            else if(b[1]<0){
+                b[1]=0;
+            }
+            con.set(b[1],b[0]);
+             PrintWriter writer = response.getWriter();
+            writer.write("data: "+"Temp "+"- "+c+"\n\n"+"Heat"+"- "+b[1]+"\n\n");
+             HttpSession session=request.getSession();
+            System.out.println(System.currentTimeMillis()-session.getCreationTime());
+            if(System.currentTimeMillis()-session.getCreationTime()>20000){
+               ((Con) session.getAttribute("con")).disconnect();
+               ((Scilab) session.getAttribute("sci")).close();
+                session.removeAttribute("con");
+                session.removeAttribute("sci");
+                session.removeAttribute("check");
+              session.invalidate();
+               writer.write(":"+"done");
+            }
+            
           }
-        catch ( Exception e )
+      }
+           // Thread.sleep(1000);
+   }
+        catch ( NumberFormatException | IOException | JavasciException e )
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
     
             

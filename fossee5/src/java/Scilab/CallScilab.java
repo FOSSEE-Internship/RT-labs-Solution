@@ -30,14 +30,18 @@ public class CallScilab {
 		ScilabInteger scilab_setpoint= new ScilabInteger(setpoint);
 		ScilabInteger scilab_fan= new ScilabInteger(fan);
                 ScilabDouble scilab_temp= new ScilabDouble(temp);
+               // sci.exec("disp('hulla re')");
 		sci.put("setpoint",scilab_setpoint);
 		sci.put("fan",scilab_fan);
                 sci.put("temp",scilab_temp);
-		sci.exec("y=sbhs(a,b)");
-		ScilabDouble c=(ScilabDouble) sci.get("y");
-                    System.out.println(c.getRealElement(0, 0));
-		
-		//sci.close();
+		//sci.exec("[x y]=sbhs(setpoint,fan,temp)");
+                //sci.exec("ans=[x y]");
+                
+                sci.exec("y=sbhs(setpoint,fan,temp)");
+		ScilabInteger c=(ScilabInteger) sci.get("y");
+                   b[0]=scilab_fan.getIntElement(0,0);
+                   b[1]=c.getIntElement(0, 0);
+                   
                 }
          return b;       
     }

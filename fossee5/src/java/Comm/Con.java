@@ -7,6 +7,8 @@ package Comm;
 
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
+import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
 import java.io.IOException;
@@ -25,13 +27,11 @@ public class Con{
         super();
     }
     
-    public double  readTemp(){
+    public double  readTemp() throws IOException{
         Double a=0.0;
-        try {  
+        
            out.write(255);
-        } catch (IOException ex) {
-            Logger.getLogger(Con.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
                 
                 try{
                 	final byte[] buffer = new byte[2];
@@ -49,10 +49,15 @@ public class Con{
         return a;
     }
     
-public int connect ( String portName ) throws Exception
+public int connect ( String portName ) throws PortInUseException, UnsupportedCommOperationException, IOException 
     { 
     	   
-        CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
+        CommPortIdentifier portIdentifier=null;
+        try {
+            portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
+        } catch (NoSuchPortException ex) {
+            return 0;
+        }
     Double a=0.0;
     
     	
@@ -98,5 +103,6 @@ public void disconnect() throws IOException{
      out.flush();
      out.close();
      serialPort.close();
+     System.out.println("disconnect");
 }
 }
