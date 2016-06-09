@@ -99,15 +99,6 @@ public class sbhs_send extends HttpServlet {
             
             System.out.println(System.currentTimeMillis()-session.getCreationTime());
             if(System.currentTimeMillis()-session.getCreationTime()>20000){
-               ((Con) session.getAttribute("con")).disconnect();
-               ((Scilab) session.getAttribute("sci")).close();
-               ((PrintWriter)session.getAttribute("writerfile")).close();
-                session.removeAttribute("con");
-                session.removeAttribute("sci");
-                session.removeAttribute("check");
-                session.removeAttribute("writerfile");
-                session.removeAttribute("counter");
-              session.invalidate();
                writer.write("::"+"done");
             }
             

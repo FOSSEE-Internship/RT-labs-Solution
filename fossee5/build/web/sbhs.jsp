@@ -49,33 +49,29 @@ and open the template in the editor.
   </style>
   <script>
       window.onbeforeunload = function() {
-          
-    <%
-        if(session!=null){
-            if(((Con) session.getAttribute("con"))!=null) {
-                ((Con) session.getAttribute("con")).disconnect();
-            }
-            if(((Scilab) session.getAttribute("sci"))!=null){
-               ((Scilab) session.getAttribute("sci")).close();
-            }
-            if(((PrintWriter)session.getAttribute("writerfile"))!=null){
-               ((PrintWriter)session.getAttribute("writerfile")).close();
-            }
-                session.removeAttribute("con");
-                session.removeAttribute("sci");
-                session.removeAttribute("check");
-                session.removeAttribute("writerfile");
-                session.removeAttribute("counter");
-              session.invalidate();
-                
-        }
-        %>
-                return "hey";
-               
+          if (window.localStorage) {
+        // flag the page as being unloading
+        window.localStorage['myUnloadEventFlag']=new Date().getTime();
+    }
+        var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
+       // setTimeout(function(){wnd.close();},500);
+        return true;
 };
-
+window.onload = function() {
+         if (window.localStorage) {
+        var t0 = Number(window.localStorage['myUnloadEventFlag']);
+        if (isNaN(t0)) t0=0;
+        var t1=new Date().getTime();
+        var duration=t1-t0;
+        if (duration>100*1000) {
+            alert('heya');
+            var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
+       // setTimeout(function(){wnd.close();},500);
+        }
+}
+};
    function start(){
-      
+    
         var eventSource = new EventSource("sbhs_send");
           var setpoint= $("#setpoint").val();
           var fan = $("#fan").val();
@@ -129,7 +125,7 @@ and open the template in the editor.
            </select>
          </form>
          <button id="start">START</button>
-          <button id="stop">STOP</button>
+         <button id="stop"onclick="stop()">STOP</button>
           <button id="pause">PAUSE</button>
           
         <h2 id="temp" ></h2>
@@ -232,7 +228,11 @@ and open the template in the editor.
     $("#pause").on("click",function(){ 
                clearInterval(myID);
         });
-   
+         $("#stop").on("click",function(){ 
+             clearInterval(myID);
+                var wnd=window.open("close.jsp","connectWindow", "width=100,height=100,menubar=no");
+                //setTimeout(function(){wnd.close();},100);
+        });
         </script>
     </body>
 </html>
