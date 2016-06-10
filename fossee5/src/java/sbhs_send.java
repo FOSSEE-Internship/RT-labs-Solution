@@ -95,8 +95,18 @@ public class sbhs_send extends HttpServlet {
             int count=(int)request.getSession().getAttribute("counter");
             count++;
             request.getSession().setAttribute("counter",count);
-            writerfile.println(String.format("%4s %15s %8s %8s %8s\r\n",(count+"."), System.currentTimeMillis(),b[1],b[0],c));
-            
+            //writerfile.println(String.format("%4s %15s %8s %8s %8s\r\n",(count+"."), System.currentTimeMillis(),b[1],b[0],c));
+            writerfile.append(String.valueOf(count));
+            writerfile.append(" ");
+            writerfile.append(b[1]);
+            writerfile.append(" ");
+            writerfile.append(b[0]);
+            writerfile.append(" ");
+            writerfile.append(String.valueOf(c));
+            writerfile.append(" ");
+            writerfile.append(String.valueOf(System.currentTimeMillis()));
+            writerfile.append("\n");
+
             System.out.println(System.currentTimeMillis()-session.getCreationTime());
             if(System.currentTimeMillis()-session.getCreationTime()>20000){
                writer.write("::"+"done");
@@ -104,6 +114,9 @@ public class sbhs_send extends HttpServlet {
             
           }
       }
+            else{
+                System.out.println("null");
+            }
    }
         catch ( NumberFormatException | IOException | JavasciException e )
         {

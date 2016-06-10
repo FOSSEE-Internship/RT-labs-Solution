@@ -11,6 +11,6 @@
         
     </head>
     <body>
-        <p>resources are being initiated</p>
+        <h1>resources are being initiated</h1>
     </body>
 </html>

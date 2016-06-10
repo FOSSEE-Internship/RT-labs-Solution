@@ -48,24 +48,30 @@ and open the template in the editor.
 }
   </style>
   <script>
-      window.onbeforeunload = function() {
+       var myID=0;
+      $(window).on('beforeunload', function(){
           if (window.localStorage) {
         // flag the page as being unloading
         window.localStorage['myUnloadEventFlag']=new Date().getTime();
     }
-        var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
+      //var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
        // setTimeout(function(){wnd.close();},500);
-        return true;
-};
+       return true;
+});
 window.onload = function() {
          if (window.localStorage) {
         var t0 = Number(window.localStorage['myUnloadEventFlag']);
         if (isNaN(t0)) t0=0;
         var t1=new Date().getTime();
         var duration=t1-t0;
-        if (duration>100*1000) {
-            alert('heya');
+        if (duration>10*1000) {
             var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
+            $(window).off('beforeunload');
+            if (window.localStorage) {
+        // flag the page as being unloading
+        window.localStorage['myUnloadEventFlag']=new Date().getTime();
+    }
+            window.location.href="initres.jsp";
        // setTimeout(function(){wnd.close();},500);
         }
 }
@@ -88,8 +94,12 @@ window.onload = function() {
                 success: function (data) {
         if(data.split("::")[1]!==undefined){
             if(data.split("::")[2]==="done"){
-                window.location.href="reload.jsp";
+                $(window).off('beforeunload');
+                var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
+                //window.location.href="reload.jsp";
                 document.getElementById('temp').innerHTML="experiment finished";
+                clearInterval(myID);
+                
                 
             }
             else if(data.split("::")[2]==="error"){
@@ -171,54 +181,9 @@ window.onload = function() {
         });
         
         </script>
-        <%
-            Scilab sci=new Scilab();
-            session=request.getSession(true);
-           System.out.println("session created");
-            session.setAttribute("sci",sci);   
-            Con c=new Con();
-            session.setAttribute("con",c);
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = new Date();
-	    String tempName= dateFormat.format(date);
-            String nameFile[]=tempName.split(" ");
-            tempName=nameFile[0]+"-"+nameFile[1]+".txt";
-            int count=0;
-            session.setAttribute("counter", count);
-            File file = new File("/home/anamika/testlog/"+tempName);
-            System.out.println(file.getAbsolutePath());
-            if(!file.exists()) {
-                file.createNewFile();
-             } 
-            PrintWriter writer = new PrintWriter(file, "UTF-8");
-            session.setAttribute("writerfile",writer);
-            writer.write(String.format("%3s %15s %8s %8s %14s \r\n","NO.","TIMESTAMP","HEAT","FAN","TEMPERATURE"));
-            
-            String portName=null;
-            try{
-                
-                 String target1 = "/home/anamika/test.sh";
-                 Runtime rt = Runtime.getRuntime();
-                 Process proc1 = rt.exec(target1);
-                 proc1.waitFor();
-                 String output = new String();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(proc1.getInputStream()));
-                 String line = "";                       
-                 while ((line = reader.readLine())!= null) {
-                         output+=line;
-                 }
-                String[] port=output.split(" ");
-                portName=port[port.length-1];
-                  //  System.out.println(portName);
-         } catch (IOException | InterruptedException t) {
-                 t.printStackTrace();
-         }
-            int check=c.connect(portName);
-            session.setAttribute("check", check);
-            System.out.println("connected");
-        %>
+        
         <script>
-            var myID=0;
+           
         $("#start").on("click",function(){ 
                
             if($("#itr").val()*1000!==0){
@@ -229,9 +194,12 @@ window.onload = function() {
                clearInterval(myID);
         });
          $("#stop").on("click",function(){ 
-             clearInterval(myID);
+                clearInterval(myID);
+                $("#start").prop('disabled',true);
+                $("#pause").prop('disabled',true);
                 var wnd=window.open("close.jsp","connectWindow", "width=100,height=100,menubar=no");
                 //setTimeout(function(){wnd.close();},100);
+                alert('ur session is dismissed')
         });
         </script>
     </body>
