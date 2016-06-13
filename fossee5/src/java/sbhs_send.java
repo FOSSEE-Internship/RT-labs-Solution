@@ -91,7 +91,7 @@ public class sbhs_send extends HttpServlet {
            
             con.set(Integer.parseInt(b[1]),Integer.parseInt(b[0]));
            // writer.write("data:: "+"Temp "+"- "+c+"\n\n"+"Heat"+"- "+b[1]+"\n\n");
-           writer.write("data::"+c);
+           writer.write("data::"+c+"&"+b[1]+"&"+b[0]);
             PrintWriter writerfile=(PrintWriter)(request.getSession().getAttribute("writerfile"));
             int count=(int)request.getSession().getAttribute("counter");
             count++;

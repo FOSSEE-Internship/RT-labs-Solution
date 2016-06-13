@@ -54,16 +54,15 @@ and open the template in the editor.
   </style>
   <script>
        var myID=0;
-       var chart;
+       var chart1;
+       var chart2;
        var count=0;
       $(window).on('beforeunload', function(){
           if (window.localStorage) {
         // flag the page as being unloading
         window.localStorage['myUnloadEventFlag']=new Date().getTime();
     }
-      //var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
-       // setTimeout(function(){wnd.close();},500);
-       return true;
+      
 });
 window.onload = function() {
          if (window.localStorage) {
@@ -85,40 +84,121 @@ window.onload = function() {
 };
 
 $(document).ready(function() {
-        chart = new Highcharts.Chart({
+        chart1 = new Highcharts.Chart({
         chart: {
-            renderTo: 'container',
+            renderTo: 'charttemp',
             defaultSeriesType: 'spline',
             events: {
                load:function() {
-    chart = this; // `this` is the reference to the chart
+    chart1 = this; // `this` is the reference to the chart
    setTimeout(start,1000);
 }
             }
         },
         title: {
-            text: 'Live random data'
+            text: 'Temp vs Time'
         },
         xAxis: {
             //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
              type: 'datetime',
             tickPixelInterval: 150,
+            title: {
+                text: 'Time',
+                margin: 40
+            },
             maxZoom: 20 * 1000
         },
         yAxis: {
             minPadding: 0.2,
             maxPadding: 0.2,
             title: {
-                text: 'Value',
-                margin: 80
+                text: 'Temp',
+                margin: 40
+            }
+        },
+        exporting: {
+            buttons: {
+                contextButton: {
+                    	menuItems: [{
+                            textKey: 'downloadPNG',
+                            onclick: function () {
+                                this.exportChart();
+                            }
+                        }, {
+                            textKey: 'downloadJPEG',
+                            onclick: function () {
+                                this.exportChart({
+                                    type: 'image/jpeg'
+                                });
+                            }
+                        }]
+                }
             }
         },
         series: [{
-            name: 'Random data',
+            
            data: []
-           //data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
         }]
-    });        
+    });  
+    chart2 = new Highcharts.Chart({
+        chart: {
+            renderTo: 'chartheat',
+            defaultSeriesType: 'spline',
+            events: {
+               load:function() {
+    chart2 = this; // `this` is the reference to the chart
+   setTimeout(start,1000);
+}
+            }
+        },
+        credits: {
+            enabled: false
+        },
+
+        title: {
+            text: 'Heat vs Time'
+        },
+        xAxis: {
+            //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+             type: 'datetime',
+            tickPixelInterval: 100,
+            title: {
+                text: 'Time',
+                margin: 40
+            },
+            maxZoom: 20 * 100
+        },
+        yAxis: {
+            minPadding: 0.2,
+            maxPadding: 0.2,
+            title: {
+                text: 'Heat',
+                margin: 40
+            }
+        },exporting: {
+            buttons: {
+                contextButton: {
+                    	menuItems: [{
+                            textKey: 'downloadPNG',
+                            onclick: function () {
+                                this.exportChart();
+                            }
+                        }, {
+                            textKey: 'downloadJPEG',
+                            onclick: function () {
+                                this.exportChart({
+                                    type: 'image/jpeg'
+                                });
+                            }
+                        }]
+                }
+            }
+        },
+        series: [{
+          color: '#ff0000', 
+           data: []
+        }]
+    });
 });
    function start(){
     
@@ -139,7 +219,7 @@ $(document).ready(function() {
         if(data.split("::")[1]!==undefined){
             if(data.split("::")[2]==="done"){
                 $(window).off('beforeunload');
-                chart.redraw();
+                
                 var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
                 //window.location.href="reload.jsp";
                 document.getElementById('temp').innerHTML="experiment finished";
@@ -152,17 +232,15 @@ $(document).ready(function() {
                 document.getElementById('temp').innerHTML=data.split("::")[1];
             }
             else{
-                   document.getElementById('temp').innerHTML=data.split("::")[1];
-                  var series = chart.series[0],
-                   shift = series.data.length > 20; // shift if the series is 
+                   document.getElementById('temp').innerHTML=data.split("::")[1].split("&")[0];
+                  var series = chart1.series[0],
+                   shift = series.data.length > 50; // shift if the series is 
                                                  // longer than 20              
-            // add the point
-                point=data.split("::")[1];
-                
-              chart.series[0].addPoint([(new Date()).getTime(),parseFloat(point)],true,shift);
-               // console.log(chart.series[0]);
-            //setTimeout(start, 1000);  
-            
+                point=data.split("::")[1].split("&")[0];
+                point1=data.split("::")[1].split("&")[1];
+                point2=data.split("::")[1].split("&")[2];
+              chart1.series[0].addPoint([(new Date()).getTime(),parseFloat(point)],true,shift);
+              chart2.series[0].addPoint([(new Date()).getTime(),parseFloat(point1)],true,shift);
                 }
             }
                 },
@@ -261,7 +339,8 @@ $(document).ready(function() {
                 alert('ur session is dismissed');
         });
         </script>
-        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        <div id="charttemp" style="width: 550px;float:left ;height: 400px; margin: 0 auto"></div>
+        <div id="chartheat" style="width: 550px;float:left ; height: 400px; margin: 0 auto"></div>
     </body>
 </html>
 

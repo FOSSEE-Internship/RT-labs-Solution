@@ -13,14 +13,23 @@
 <!DOCTYPE html>
   <%
         if(session!=null){
-            if(((Con) session.getAttribute("con"))!=null) {
+            try{
                 ((Con) session.getAttribute("con")).disconnect();
             }
-            if(((Scilab) session.getAttribute("sci"))!=null){
+            catch(NullPointerException e){
+                
+            }
+           try{
                ((Scilab) session.getAttribute("sci")).close();
             }
-            if(((PrintWriter)session.getAttribute("writerfile"))!=null){
+           catch(NullPointerException e){
+                
+            }
+            try{
                ((PrintWriter)session.getAttribute("writerfile")).close();
+            }
+            catch(NullPointerException e){
+                
             }
                 session.removeAttribute("con");
                 session.removeAttribute("sci");
