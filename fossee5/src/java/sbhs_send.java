@@ -90,7 +90,8 @@ public class sbhs_send extends HttpServlet {
             }
            
             con.set(Integer.parseInt(b[1]),Integer.parseInt(b[0]));
-            writer.write("data:: "+"Temp "+"- "+c+"\n\n"+"Heat"+"- "+b[1]+"\n\n");
+           // writer.write("data:: "+"Temp "+"- "+c+"\n\n"+"Heat"+"- "+b[1]+"\n\n");
+           writer.write("data::"+c);
             PrintWriter writerfile=(PrintWriter)(request.getSession().getAttribute("writerfile"));
             int count=(int)request.getSession().getAttribute("counter");
             count++;
@@ -108,15 +109,13 @@ public class sbhs_send extends HttpServlet {
             writerfile.append("\n");
 
             System.out.println(System.currentTimeMillis()-session.getCreationTime());
-            if(System.currentTimeMillis()-session.getCreationTime()>20000){
+            if(System.currentTimeMillis()-session.getCreationTime()>200000){
                writer.write("::"+"done");
             }
             
           }
       }
-            else{
-                System.out.println("null");
-            }
+            
    }
         catch ( NumberFormatException | IOException | JavasciException e )
         {

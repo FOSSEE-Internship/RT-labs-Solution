@@ -30,6 +30,11 @@ and open the template in the editor.
           <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://www.highcharts.com/samples/static/highslide-full.min.js"></script>
+<script src="https://www.highcharts.com/samples/static/highslide.config.js" charset="utf-8"></script>
   <style type="text/css">
       #slider {
     margin: 10px;
@@ -49,6 +54,8 @@ and open the template in the editor.
   </style>
   <script>
        var myID=0;
+       var chart;
+       var count=0;
       $(window).on('beforeunload', function(){
           if (window.localStorage) {
         // flag the page as being unloading
@@ -76,6 +83,43 @@ window.onload = function() {
         }
 }
 };
+
+$(document).ready(function() {
+        chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'container',
+            defaultSeriesType: 'spline',
+            events: {
+               load:function() {
+    chart = this; // `this` is the reference to the chart
+   setTimeout(start,1000);
+}
+            }
+        },
+        title: {
+            text: 'Live random data'
+        },
+        xAxis: {
+            //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+             type: 'datetime',
+            tickPixelInterval: 150,
+            maxZoom: 20 * 1000
+        },
+        yAxis: {
+            minPadding: 0.2,
+            maxPadding: 0.2,
+            title: {
+                text: 'Value',
+                margin: 80
+            }
+        },
+        series: [{
+            name: 'Random data',
+           data: []
+           //data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        }]
+    });        
+});
    function start(){
     
         var eventSource = new EventSource("sbhs_send");
@@ -95,6 +139,7 @@ window.onload = function() {
         if(data.split("::")[1]!==undefined){
             if(data.split("::")[2]==="done"){
                 $(window).off('beforeunload');
+                chart.redraw();
                 var wnd=window.open("close.jsp","MsgWindow", "width=100,height=100");
                 //window.location.href="reload.jsp";
                 document.getElementById('temp').innerHTML="experiment finished";
@@ -106,11 +151,24 @@ window.onload = function() {
                
                 document.getElementById('temp').innerHTML=data.split("::")[1];
             }
-            else
+            else{
                    document.getElementById('temp').innerHTML=data.split("::")[1];
+                  var series = chart.series[0],
+                   shift = series.data.length > 20; // shift if the series is 
+                                                 // longer than 20              
+            // add the point
+                point=data.split("::")[1];
+                
+              chart.series[0].addPoint([(new Date()).getTime(),parseFloat(point)],true,shift);
+               // console.log(chart.series[0]);
+            //setTimeout(start, 1000);  
+            
                 }
-                }
+            }
+                },
+                cache: false
             });   
+              
     }
    
             
@@ -199,9 +257,11 @@ window.onload = function() {
                 $("#pause").prop('disabled',true);
                 var wnd=window.open("close.jsp","connectWindow", "width=100,height=100,menubar=no");
                 //setTimeout(function(){wnd.close();},100);
-                alert('ur session is dismissed')
+                
+                alert('ur session is dismissed');
         });
         </script>
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     </body>
 </html>
 
