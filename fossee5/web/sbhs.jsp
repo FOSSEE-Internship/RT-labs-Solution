@@ -35,6 +35,11 @@ and open the template in the editor.
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://www.highcharts.com/samples/static/highslide-full.min.js"></script>
 <script src="https://www.highcharts.com/samples/static/highslide.config.js" charset="utf-8"></script>
+ <link rel="shortcut icon" href="http://vlabs.iitb.ac.in/sbhs/static/img/favicon.ico">
+    <link rel="stylesheet" href="http://vlabs.iitb.ac.in/sbhs/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="front.css">
+    <link rel="stylesheet" href="http://vlabs.iitb.ac.in/sbhs/static/css/bootstrap-responsive.min.css">
+     
   <style type="text/css">
       #slider {
     margin: 10px;
@@ -52,11 +57,15 @@ and open the template in the editor.
     width: 200px;
 }
   </style>
+  <script src="front.js" type="text/javascript" charset="utf-8"></script>
+<script>
+   
+</script>
   <script>
        var myID=0;
        var chart1;
        var chart2;
-       var count=0;
+       var text="";
       $(window).on('beforeunload', function(){
           if (window.localStorage) {
         // flag the page as being unloading
@@ -81,9 +90,49 @@ window.onload = function() {
        // setTimeout(function(){wnd.close();},500);
         }
 }
+
 };
 
 $(document).ready(function() {
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+    colArray=[];
+      <%
+          String s[]={"null","null"};
+          if(session.getAttribute("code")!=null)
+         s=((String)session.getAttribute("code")).split("~");
+         for(int i=0;i<s.length;i++){
+             System.out.println(s[i]);
+         }
+         %> 
+                  
+      <% for (int i=0; i<s.length; i++) { %>
+colArray[<%= i %>] = "<%= s[i] %>"; 
+editor.setValue(editor.getValue()+colArray[<%=i%>]+'\n',1); 
+
+
+<% } %>
+    
+      
+ 
+     $("#save").on("click",function(){ 
+               text=editor.getValue();
+               $.ajax({
+                url: "savefile",
+                type: 'GET',   
+                dataType: 'text',
+                data: {
+                    mypostvar: text
+            },
+                
+                success: function (data) {
+                    alert('yay');
+                    window.location.href="sbhs.jsp"; 
+                }
+                });
+      });
+      
         chart1 = new Highcharts.Chart({
         chart: {
             renderTo: 'charttemp',
@@ -229,7 +278,7 @@ $(document).ready(function() {
             }
             else if(data.split("::")[2]==="error"){
                
-                document.getElementById('temp').innerHTML=data.split("::")[1];
+                document.getElementById('section2').innerHTML=data.split("::")[1];
             }
             else{
                    document.getElementById('temp').innerHTML=data.split("::")[1].split("&")[0];
@@ -248,19 +297,47 @@ $(document).ready(function() {
             });   
               
     }
-   
-            
+    
+
 </script>
   
   
     </head>
     <body>
-         <h1>FEEDBACK (SBHS)</h1>
-         <form method="post" >
-           Setpoint:<input id ="setpoint" readonly="true"/><div id="slider"></div>
-           Fan:<input id="fan" readonly="true"/><div id="slider1"></div>
-           Iteration rate :<select id="itr" >
-               <option disabled="true" selected value>---</option>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+    
+            <div class="span12">
+            <a href="wop.html" class="brand">Single Board Heater System Lab</a>
+                        <ul class="nav pull-right">
+                
+                <li><a href="">Refresh</a></li>
+                
+            </ul>
+            <ul class="nav pull-right">
+                <li><a href="/sbhs/info">SBHS InfoCentre</a></li>
+                <li><a href="http://sbhs.os-hardware.in/downloads" target="_blank">Downloads</a></li>
+                <li><a href="/sbhs/theory">Theory</a></li>
+                <li><a href="/sbhs/procedure">Procedure</a></li>
+                <li><a href="/sbhs/experiments">Experiments</a></li>
+                <li><a href="/sbhs/quiz ">Quiz</a></li>
+                <li><a href="/sbhs/feedback">Feedback / Contact Us</a></li> 
+                <li><a href="/sbhs/about">About Us</a></li>                
+            </ul>
+            </div>
+
+            </div>
+            </div>
+
+    <h1> Experiment </h1>
+<div id="nav">
+<form method="post">
+  <input type="text-box" id="setpoint" name="setpoint" placeholder="Enter Setpoint">
+  <div id="slider"></div>
+  <input type="text-box"  id="fan"  name="fan" placeholder="Enter Fan">
+  <div id="slider1"></div>
+  Iteration Rate:<select id="itr">
+    <option disabled="true" selected value>---</option>
                <option value="0.50">0.50 secs</option>
                <option value="1.00">1.00 secs</option>
                <option value="1.5">1.500 secs</option>
@@ -269,14 +346,45 @@ $(document).ready(function() {
                <option value="3.0">3.000 secs</option>
                <option value="3.5">3.500 secs</option>
            </select>
-         </form>
-         <button id="start">START</button>
-         <button id="stop"onclick="stop()">STOP</button>
-          <button id="pause">PAUSE</button>
-          
-        <h2 id="temp" ></h2>
-        <h2 id="heat"></h2>
+    </form>     
+<button id="start">START</button>
+<button id="stop"onclick="stop()">STOP</button>
+<button id="pause">PAUSE</button>
+<h2 id="temp"></h2>
+
+    
+</div>
+    <div id="one">
+        <p>Write your scilab code here          <button id="save">SAVE</button></p> 
          
+<div id="editor"></div>
+    
+
+   
+    <div id="form2">
+        <form method="post" id="formfile"  action="fileupload"enctype="multipart/form-data">
+
+  <input type="file"  id="file" name="file" placeholder="Make it easy..">
+  <input type="submit" id= "upload" value="Upload" >
+ 
+</form>     
+    </div>
+         <div>
+         <h4 id="error">errors</h4>        
+    <textarea  id="section2">
+    </textarea>
+         </div>  
+  </div>  
+   
+    
+    
+    <div id="part" >
+        
+        <div id="charttemp" style="width: 400px;float:left ;height: 300px; margin: 0 auto"></div>
+        <div id="chartheat" style="width: 400px;float:left ; height: 300px; margin: 0 auto"></div>
+         
+    
+    </div>   
 
 <script>
   $(function() {
@@ -338,9 +446,9 @@ $(document).ready(function() {
                 
                 alert('ur session is dismissed');
         });
+       
         </script>
-        <div id="charttemp" style="width: 550px;float:left ;height: 400px; margin: 0 auto"></div>
-        <div id="chartheat" style="width: 550px;float:left ; height: 400px; margin: 0 auto"></div>
+        
     </body>
 </html>
 

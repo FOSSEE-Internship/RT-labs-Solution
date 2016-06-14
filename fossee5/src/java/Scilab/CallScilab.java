@@ -22,7 +22,7 @@ public class CallScilab {
     public String[] scilab(int setpoint,int fan,double temp ,Scilab sci) throws JavasciException.InitializationException, JavasciException, FileNotFoundException{
 		String[] b=new String[3];
 		try{
-		sci.open(new File("/home/anamika/prop.sci"));
+		sci.open(new File("/home/anamika/a.sci"));
                 }
                catch(JavasciException.AlreadyRunningException e){
                }
