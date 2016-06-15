@@ -25,6 +25,7 @@
     }
             </script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
         <%
             Scilab sci=new Scilab();
             session=request.getSession(true);
@@ -68,6 +69,7 @@
                  t.printStackTrace();
          }
             int check=c.connect(portName);
+            
             session.setAttribute("check", check);
             System.out.println("connected");
             response.sendRedirect("sbhs.jsp");

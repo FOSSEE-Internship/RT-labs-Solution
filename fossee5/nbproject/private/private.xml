@@ -4,14 +4,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/Comm/Con.java</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/web/WEB-INF/web.xml</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/Scilab/CallScilab.java</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/web/close.jsp</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/web/initres.jsp</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/web/sbhs.jsp</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/upload.java</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/web/reload.jsp</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/sbhs_send.java</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/fileupload.java</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/savefile.java</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/sbhs_send.java</file>
         </group>
     </open-files>
 </project-private>

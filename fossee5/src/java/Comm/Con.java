@@ -26,6 +26,25 @@ public class Con{
     public Con(){
         super();
     }
+    public int readMID() throws IOException{
+        out.write(252);
+        
+                int a=0;
+                try{
+                	final byte[] buffer = new byte[2];
+                	  int total = 0;
+                	  int read = 0;
+                	  while (total <=1 && (read = in.read(buffer, total, 2 - total)) >= 0) {
+                	    total += read;
+                	    out.flush();
+                	  }
+                        a= Integer.parseInt(String.valueOf(buffer[0]))+10*(Integer.parseInt(String.valueOf(buffer[1])));
+                }
+                catch(IOException e){
+                	e.printStackTrace();
+                }    
+        return a;
+    }
     
     public double  readTemp() throws IOException{
         Double a=0.0;
