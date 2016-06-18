@@ -41,44 +41,39 @@ public class sbhs_send extends HttpServlet {
     try (PrintWriter out = response.getWriter()) {       
             String portName=null;
         try
-        {
-        	
+        {	
             String setpoint = request.getParameter("mypostvar");
             String fan = request.getParameter("mypostvar1");
             if(setpoint!=null&&fan!=null){
             Integer d1=Integer.parseInt(setpoint);
             Integer d2=Integer.parseInt(fan);
-             Con con=null;int check=0;  
+                System.out.println(d1+" "+d2);
+            Con con=null;int check=0;  
        try{
             con = (Con) request.getSession().getAttribute("con");
             check=(Integer)request.getSession().getAttribute("check");
        }catch(NullPointerException e){
-           System.out.println("session null");
+            System.out.println("session null");
        }
             double c=0.0;
             if(check==1){
                 try{
                       c =con.readTemp();
+                      System.out.println(c);
                 }catch(IOException e){
                     request.getSession().invalidate();
-           response.sendRedirect("/fossee5/reload.jsp");
+                    response.sendRedirect("/fossee5/reload.jsp");
            return;
                 }
                 
            
             Scilab sci = (Scilab) request.getSession().getAttribute("sci");
+            String filename=(String)request.getSession().getAttribute("filename");
             CallScilab callsci=new CallScilab();
-            String b[]=callsci.scilab(d1, d2,c,sci);
+                System.out.println(filename);
+            String b[]=callsci.scilab(d1, d2,c,sci,filename);
+            
              if(b[1].equals("-1")&&b[1].equals("-1")){
-                 ((Con) session.getAttribute("con")).disconnect();
-               ((Scilab) session.getAttribute("sci")).close();
-               ((PrintWriter)session.getAttribute("writerfile")).close();
-                session.removeAttribute("con");
-                session.removeAttribute("sci");
-                session.removeAttribute("check");
-                session.removeAttribute("writerfile");
-                session.removeAttribute("counter");
-              session.invalidate();
                writer.write("data::"+b[2]+"::error");
                return;
             }

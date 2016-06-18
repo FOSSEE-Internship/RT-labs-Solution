@@ -4,21 +4,21 @@
  * and open the template in the editor.
  */
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import bean.user;
+import database.database;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author root
+ * @author Master
  */
-public class savefile extends HttpServlet {
+public class signup extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,31 +32,40 @@ public class savefile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            File f = new File("/home/anamika/scilabcodes/"+request.getParameter("mypostvar1"));
-            request.getSession().setAttribute("filename",request.getParameter("mypostvar1"));
-            if(!f.exists()) {
-                f.createNewFile();
-             } 
-           FileWriter fw = new FileWriter(f.getAbsoluteFile());
-            try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    String code=request.getParameter("mypostvar");
-                    bw.flush();
-                    bw.append(code);
-                String splitcode[]= code.split("\n");
-                
-                code="";
-                for(int i=0;i<splitcode.length;i++)
-                        
-                    code+=splitcode[i]+"~";
-                
-                
-                request.getSession(false).setAttribute("code",code);
-            }
+        PrintWriter out = response.getWriter();
+        try {
+            /* TODO output your page here. You may use following sample code. */
+             String s=request.getParameter("username");
+             String s1=request.getParameter("name");
+             String s2=request.getParameter("email");
+             String s3=request.getParameter("mobileno");
+             String s4=request.getParameter("state");        
+             String s5=request.getParameter("password");
+                  
 
-			//System.out.println("Done");
 
-           
+//out.println("added"+s1);
+             user ur=new user();
+             ur.setusername(s);
+             ur.setName(s1);
+//out.println("added"+s);
+             ur.setEmail(s2);
+              ur.setmobile(s3);
+            // out.println("added")
+             ur.setstate(s4);
+             ur.setPassword(s5);
+             
+ 
+   database db=new database();
+  
+   
+   db.addnewuser(ur);
+  out.println("signed up"+ur.getName());
+   HttpSession session=request.getSession();
+   session.setAttribute("name",s2);
+   response.sendRedirect("index.html");
+        } finally {
+            out.close();
         }
     }
 

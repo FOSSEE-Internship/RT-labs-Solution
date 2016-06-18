@@ -1,7 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    
-
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>HelloServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>HelloServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckLogin</servlet-name>
+        <servlet-class>CheckLogin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>user</servlet-name>
+        <servlet-class>user</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>hello</servlet-name>
+        <servlet-class>hello</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>signup</servlet-name>
+        <servlet-class>signup</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>sbhs1</servlet-name>
+        <servlet-class>sbhs1</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Con</servlet-name>
+        <servlet-class>Con</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>slot</servlet-name>
+        <servlet-class>slot</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>viewslot</servlet-name>
+        <servlet-class>viewslot</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>currSlot</servlet-name>
+        <servlet-class>currSlot</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/HelloServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckLogin</servlet-name>
+        <url-pattern>/CheckLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>user</servlet-name>
+        <url-pattern>/user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>hello</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>signup</servlet-name>
+        <url-pattern>/signup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>sbhs1</servlet-name>
+        <url-pattern>/sbhs1</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Con</servlet-name>
+        <url-pattern>/Con</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>slot</servlet-name>
+        <url-pattern>/slot</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>viewslot</servlet-name>
+        <url-pattern>/viewslot</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>currSlot</servlet-name>
+        <url-pattern>/currSlot</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>sbhs_send</servlet-name>
         <servlet-class>sbhs_send</servlet-class>
@@ -13,10 +99,6 @@
     <servlet>
         <servlet-name>fileupload</servlet-name>
         <servlet-class>fileupload</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>download</servlet-name>
-        <servlet-class>download</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>sbhs_send</servlet-name>
@@ -30,10 +112,11 @@
         <servlet-name>fileupload</servlet-name>
         <url-pattern>/fileupload</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>download</servlet-name>
-        <url-pattern>/download</url-pattern>
-    </servlet-mapping>
+    <listener>
+        <listener-class>
+            javalistener.MyServletContextListener
+        </listener-class>
+    </listener>
     <session-config>
         <session-timeout>
            1

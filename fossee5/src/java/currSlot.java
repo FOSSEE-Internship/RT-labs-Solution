@@ -4,21 +4,21 @@
  * and open the template in the editor.
  */
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import bean.user;
+import database.database;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author root
+ * @author Master
  */
-public class savefile extends HttpServlet {
+public class currSlot extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,31 +32,32 @@ public class savefile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            File f = new File("/home/anamika/scilabcodes/"+request.getParameter("mypostvar1"));
-            request.getSession().setAttribute("filename",request.getParameter("mypostvar1"));
-            if(!f.exists()) {
-                f.createNewFile();
-             } 
-           FileWriter fw = new FileWriter(f.getAbsoluteFile());
-            try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    String code=request.getParameter("mypostvar");
-                    bw.flush();
-                    bw.append(code);
-                String splitcode[]= code.split("\n");
-                
-                code="";
-                for(int i=0;i<splitcode.length;i++)
-                        
-                    code+=splitcode[i]+"~";
-                
-                
-                request.getSession(false).setAttribute("code",code);
-            }
-
-			//System.out.println("Done");
-
-           
+        PrintWriter out = response.getWriter();
+      //  PrintWriter out = response.getWriter();
+        try {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet logincheck</title>");            
+            out.println("</head>");
+            out.println("<body>");
+          //  out.println("<p>HELLO</p>");
+            String x=request.getParameter("currDate");
+            String y=request.getParameter("currslots");
+            user us=(user)(request.getSession().getAttribute("user"));
+            us.setslot(y);
+            us.setdate(x);
+            //us.setacc_id(session);
+            database db;
+            db = new database();
+           db.adddatetime(us);
+            //us=(request.getSession().getAttribute("user")).get;
+             response.sendRedirect("viewslot");
+            out.println("</body>");
+            out.println("</html>");
+        } finally {
+            out.close();
         }
     }
 

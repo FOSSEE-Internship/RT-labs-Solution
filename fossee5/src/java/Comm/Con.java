@@ -21,7 +21,7 @@ public class Con{
     
     InputStream in=null;
     OutputStream out=null;
-    SerialPort serialPort=null;
+    
     
     public Con(){
         super();
@@ -68,43 +68,11 @@ public class Con{
         return a;
     }
     
-public int connect ( String portName ) throws PortInUseException, UnsupportedCommOperationException, IOException 
+public int connect ( SerialPort serialPort ) throws PortInUseException, UnsupportedCommOperationException, IOException 
     { 
-    	   
-        CommPortIdentifier portIdentifier=null;
-        try {
-            portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
-        } catch (NoSuchPortException ex) {
-            return 0;
-        }
-    Double a=0.0;
-    
-    	
-       if ( portIdentifier.isCurrentlyOwned() )
-        {
-            System.out.println("Error: Port is currently in use"+portIdentifier.getCurrentOwner());
-            
-            return 0;
-        }
-        else
-        {
-    CommPort commPort;
-   
-            
-            commPort = portIdentifier.open(this.getClass().getName(),2000);  
-            if ( commPort instanceof SerialPort )
-            {
-               serialPort = (SerialPort) commPort;
-                serialPort.setSerialPortParams(9600,SerialPort.DATABITS_8,SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
+        serialPort.setSerialPortParams(9600,SerialPort.DATABITS_8,SerialPort.STOPBITS_1,SerialPort.PARITY_NONE);
                  in = serialPort.getInputStream();
                 out = serialPort.getOutputStream();
-               
-            }
-            else
-            {
-                System.out.println("Error: Only serial ports are handled by this example.");
-            }
-        }     
       return 1;
     }
 public void set(int heat, int fan){
@@ -121,7 +89,7 @@ public void disconnect() throws IOException{
      in.close();
      out.flush();
      out.close();
-     serialPort.close();
+     
      System.out.println("disconnect");
 }
 }

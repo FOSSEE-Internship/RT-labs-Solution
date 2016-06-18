@@ -1,0 +1,150 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+          <meta charset="UTF-8">
+            <title>Signup Form</title>
+        
+   
+    <link rel="shortcut icon" href="http://vlabs.iitb.ac.in/sbhs/static/img/favicon.ico">
+    <link rel="stylesheet" href="http://vlabs.iitb.ac.in/sbhs/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://vlabs.iitb.ac.in/sbhs/static/css/bootstrap-responsive.min.css">
+    <script src="http://vlabs.iitb.ac.in/sbhs/static/js/jquery-latest.min.js"></script>
+    <script src="http://vlabs.iitb.ac.in/sbhs/static/js/bootstrap.min.js"></script>
+    
+    
+    <style>
+    html { margin: 0; height: 100%; }
+    body { padding-top: 70px; position: relative; margin: 25px; min-height: 88%; }
+    form {
+        margin:25px; 
+    }
+    </style>
+    </head>
+    <body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a href="/sbhs/" class="brand">Single Board Heater System Lab</a>
+
+            <ul class="nav pull-right">
+                
+        
+                
+            </ul>
+        </div>
+    </div>
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav pull-right">
+                <li><a href="/sbhs/info">SBHS InfoCentre</a></li>
+                <li><a href="http://sbhs.os-hardware.in/downloads" target="_blank">Downloads</a></li>
+                <li><a href="/sbhs/theory">Theory</a></li>
+                <li><a href="/sbhs/procedure">Procedure</a></li>
+                <li><a href="/sbhs/experiments">Experiments</a></li>
+                <li><a href="/sbhs/quiz ">Quiz</a></li>
+                <li><a href="/sbhs/feedback">Feedback / Contact Us</a></li> 
+                <li><a href="/sbhs/about">About Us</a></li>                
+            </ul>
+        </div>
+    </div>    
+        <!--
+         <div class="span6" style="margin-left: 700px; margin-top:100px; margin-right: 20px;" >
+            <div id="slider" class="carousel slide" data-interval="2000">
+                <ol class="carousel-indicators" >
+                    <li data-target="#slider" data-slide-to="0" class="active"></li>
+                    <li data-target="#slider" data-slide-to="1"></li>
+                    <li data-target="#slider" data-slide-to="2"></li>
+                    <li data-target="#slider" data-slide-to="3"></li>
+                    <li data-target="#slider" data-slide-to="4"></li>
+                </ol>
+                <!-- Carousel items -->
+           <!--     <div class="carousel-inner">
+                    <div class="active item"><img src="http://vlabs.iitb.ac.in/sbhs/static/img/01.jpg" alt="SBHS"></div>
+                    <div class="item"><img src="http://vlabs.iitb.ac.in/sbhs/static/img/02.jpg" alt="SBHS"></div>
+                    <div class="item"><img src="http://vlabs.iitb.ac.in/sbhs/static/img/03.jpg" alt="SBHS"></div>
+                    <div class="item"><img src="http://vlabs.iitb.ac.in/sbhs/static/img/04.jpg" alt="SBHS"></div>
+                    <div class="item"><img src="http://vlabs.iitb.ac.in/sbhs/static/img/05.jpg" alt="SBHS"></div>
+                </div>
+                <!-- Carousel nav -->
+           <!--     <a class="carousel-control left" href="#slider" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#slider" data-slide="next">&rsaquo;</a>
+            </div>
+        </div>
+       -->
+        
+        
+</div>
+
+    <script>
+            function validate(form)
+            {
+                if (form.gender[0].checked === true && form.gender[1].checked === true || form.gender[0].checked === false && form.gender[1].checked === false)
+                {
+                    alert("choose one");
+                    return false;
+                }
+                if(form.password[0].value!==form.password[1].value)
+                {
+                    alert("passwords aren't same");
+                    return false;
+                }
+                return true;
+            }
+        </script>
+            <div>
+                <h1 >Signup</h1>
+                <form method="post"   action="signup" onsubmit="return validate(this)">
+                    
+                    <p>USERNAME:<br><input type="text" name="username" value="" placeholder="Username" ></p>
+                    <p>NAME:<br><input type="text" name="name" value="" placeholder="name" ></p>
+                    <p>EMAIL:<br><input type="text" name="email" value="" placeholder="job@fossee.in"  ></p>
+                    <p>Mobile:<br><input type="text" name="mobileno" id="mobileno" size="30"></p>
+                    <p>State:<br><select name="state">
+                                <option value="-1" selected>select</option>
+            
+                                
+                                <option value="Andhra Pradesh">Andhra Pradesh</option> 
+                                    <option value="ArunachalPradesh">Arunachal Pradesh</option> 
+                                        <option value="Assam">Assam</option>
+                                            <option value="Bihar">Bihar </option>
+                                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                                    <option value="Goa">Goa</option>
+                                                        <option value="Gujarat">Gujarat</option> 
+                                                            <option value="Haryana">Haryana </option>
+                                                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                                    <option value="Jammu and Kashmir ">Jammu and Kashmir </option>
+                                                                        <option value="Jharkhand">Jharkhand</option> 
+                                                                            <option value="Karnataka">Karnataka</option> 
+                                                                                <option value="Kerala">Kerala </option>
+                                                                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                                                        <option value="Maharashtra">Maharashtra</option>
+                                                                                            <option value="Manipur">Manipur</option>
+                                                                                                <option value="Meghalaya">Meghalaya</option>
+                                                                                                    <option value="Mizoram">Mizoram </option>
+                                                                                                        <option value="Nagaland">Nagaland </option>
+                                                                                                           <option value="Odisha">Odisha </option>
+                                                                                                               <option value="Punjab">Punjab</option>
+                                                                                                                   <option value="Rajasthan">Rajasthan</option>
+                                                                                                                       <option value="Sikkim">Sikkim</option> 
+                                                                                                                           <option value="Tamil Nadu">Tamil Nadu</option> 
+                                                                                                                               <option value="Telangana">Telangana </option>
+                                                                                                                                   <option value="Tripura">Tripura </option>
+                                                                                                                                       <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                                                                                                           <option value="Uttarakhand">Uttarakhand </option>
+                                                                                                                                               <option value="West Bengal">West Bengal</option>
+                                
+                                
+                                
+                                
+                                </select>
+                   
+                    <p>PASSWORD:<br><input type="password" name="password" value="" placeholder="Password"  ></p>
+                    <p>REPEAT PASSWORD:<br><input type="password" name="password" value="" placeholder="Password" ></p>                
+                    <p><input type="submit" name="commit" value="Sign up"> <input type="reset"></p>
+                </form>
+            </div>
+      
+    </body>
+</html>

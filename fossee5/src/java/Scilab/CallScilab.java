@@ -19,10 +19,11 @@ import org.scilab.modules.types.ScilabSparse;
  * @author root
  */
 public class CallScilab {
-    public String[] scilab(int setpoint,int fan,double temp ,Scilab sci) throws JavasciException.InitializationException, JavasciException, FileNotFoundException{
+    public String[] scilab(int setpoint,int fan,double temp ,Scilab sci,String filename) throws JavasciException.InitializationException, JavasciException, FileNotFoundException{
 		String[] b=new String[3];
 		try{
-		sci.open(new File("/home/anamika/a.sci"));
+                    System.out.println(filename+"Scilab");
+		sci.open(new File("/home/anamika/scilabcodes/"+filename));
                 }
                catch(JavasciException.AlreadyRunningException e){
                }

@@ -1,24 +1,29 @@
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import bean.user;
+import database.database;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
+/*
  *
- * @author root
+ *
+ * @author Master
  */
-public class savefile extends HttpServlet {
+public class viewslot extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,31 +37,42 @@ public class savefile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            File f = new File("/home/anamika/scilabcodes/"+request.getParameter("mypostvar1"));
-            request.getSession().setAttribute("filename",request.getParameter("mypostvar1"));
-            if(!f.exists()) {
-                f.createNewFile();
-             } 
-           FileWriter fw = new FileWriter(f.getAbsoluteFile());
-            try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    String code=request.getParameter("mypostvar");
-                    bw.flush();
-                    bw.append(code);
-                String splitcode[]= code.split("\n");
-                
-                code="";
-                for(int i=0;i<splitcode.length;i++)
-                        
-                    code+=splitcode[i]+"~";
-                
-                
-                request.getSession(false).setAttribute("code",code);
-            }
+        PrintWriter out = response.getWriter();
+      //  PrintWriter out = response.getWriter();
+        try {
+            List<String> stime= new ArrayList<String>();
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet logincheck</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            
+          //  out.println("<p>HELLO</p>");
 
-			//System.out.println("Done");
-
-           
+            user us=(user)(request.getSession().getAttribute("user"));
+            //us.setacc_id(session);
+            database db;
+            db = new database();
+            stime=db.userdetails(us);
+           for(int i=0;i<stime.size();i++){
+         System.out.println(stime.get(i));
+           }    //us=(request.getSession().getAttribute("user")).get;
+            response.sendRedirect("viewslot.jsp");
+            out.println("</body>");
+            out.println("</html>");
+        } 
+        
+        catch( Exception ex)
+        {
+        ex.printStackTrace();;
+        
+        }
+        
+        
+        finally {
+            out.close();
         }
     }
 

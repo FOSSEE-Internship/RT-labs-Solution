@@ -1,24 +1,26 @@
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import bean.user;
+import database.database;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author root
+ * @author Master
  */
-public class savefile extends HttpServlet {
+public class CheckLogin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,31 +34,58 @@ public class savefile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            File f = new File("/home/anamika/scilabcodes/"+request.getParameter("mypostvar1"));
-            request.getSession().setAttribute("filename",request.getParameter("mypostvar1"));
-            if(!f.exists()) {
-                f.createNewFile();
-             } 
-           FileWriter fw = new FileWriter(f.getAbsoluteFile());
-            try (BufferedWriter bw = new BufferedWriter(fw)) {
-                    String code=request.getParameter("mypostvar");
-                    bw.flush();
-                    bw.append(code);
-                String splitcode[]= code.split("\n");
-                
-                code="";
-                for(int i=0;i<splitcode.length;i++)
-                        
-                    code+=splitcode[i]+"~";
-                
-                
-                request.getSession(false).setAttribute("code",code);
-            }
-
-			//System.out.println("Done");
-
+        PrintWriter out = response.getWriter();
+      //  PrintWriter out = response.getWriter();
+        try {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet logincheck</title>");            
+            out.println("</head>");
+            out.println("<body>");
+          //  out.println("<p>HELLO</p>");
+                System.out.println("checking");
+            String s=request.getParameter("username");  
+            System.out.println(s);
+            String s1=request.getParameter("password");
+            user us=new user();
+            us.setusername(s);
+            us.setPassword(s1);
+            database db;
+            db = new database();
+            
+            Integer i=db.isCorrectPassword(us);
            
+           
+            if(i!=-1)
+            {
+                
+                HttpSession session=request.getSession(true);
+                session.setAttribute("user",us);
+                int c=db.returnmid(us);
+               int d= db.getaccount(us);
+                   
+                   us.setacc_id(String.valueOf(d));
+                   
+                System.out.println("my acccount" + d);
+                 us.setm_id(String.valueOf(c));
+                   
+                System.out.println("my mid" + c);
+               
+                response.sendRedirect("sbhshome.jsp");
+                
+            }
+          else 
+                {
+                    
+              out.println("<p>ENTER CORRECT USERNAME OR PASSWORD</p>");
+              out.println("<a href='index.html'>GO BACK </a>");
+                          }
+            out.println("</body>");
+            out.println("</html>");
+        } finally {
+            out.close();
         }
     }
 
