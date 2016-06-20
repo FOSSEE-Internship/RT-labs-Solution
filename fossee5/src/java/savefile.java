@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,8 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
- * @author root
+ * This servlet is for saving the uploaded or pasted code 
+ * in the editor to the server.
+ * Currently the directory is - /home/anamika/scilabcodes/
+ * the name of the file is given by the user.
+ * This servlet is called via an ajax call , where 
+ * mypostvar1 : name of the file
+ * mypostvar : code
+ * @attribute code(session)- scilab code
+ * @attribute filename(session) - name of the file which has the code
+ * @author Anamika Modi
  */
 public class savefile extends HttpServlet {
 
@@ -34,29 +38,31 @@ public class savefile extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             File f = new File("/home/anamika/scilabcodes/"+request.getParameter("mypostvar1"));
+            
             request.getSession().setAttribute("filename",request.getParameter("mypostvar1"));
             if(!f.exists()) {
                 f.createNewFile();
              } 
+            /*
+            here the code is written to the file created.
+            */
            FileWriter fw = new FileWriter(f.getAbsoluteFile());
             try (BufferedWriter bw = new BufferedWriter(fw)) {
                     String code=request.getParameter("mypostvar");
                     bw.flush();
                     bw.append(code);
+                    /*
+                    the code attribute of the session is set to the code with an added 
+                    delimiter "~" .This delimiter is to avoid string parsing errors in 
+                    javascript , which could occur when the code is sent without delimiters to 
+                    the editor in the experiment window.
+                    */
                 String splitcode[]= code.split("\n");
-                
                 code="";
                 for(int i=0;i<splitcode.length;i++)
-                        
                     code+=splitcode[i]+"~";
-                
-                
                 request.getSession(false).setAttribute("code",code);
             }
-
-			//System.out.println("Done");
-
-           
         }
     }
 

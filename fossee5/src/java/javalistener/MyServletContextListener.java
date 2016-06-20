@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package javalistener;
 
 import Comm.sbhsconnect;
@@ -26,12 +22,17 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- *
- * @author root
+ * This is a class which is initiated when application is deployed .
+ * 
+ * @author Anamika Modi
  */
 public class MyServletContextListener implements ServletContextListener {
 
   @Override
+  /*
+  This method is started when server is closed .
+  This method will close all the open ports 
+  */
   public void contextDestroyed(ServletContextEvent e) {
     //Notification that the servlet context is about to be shut down.
       ServletContext cntxt = e.getServletContext();
@@ -46,9 +47,19 @@ public class MyServletContextListener implements ServletContextListener {
         it.remove(); // avoids a ConcurrentModificationException
     }
     cntxt.removeAttribute("hashMap");
-      System.out.println("end");
+   System.out.println("end");
   }
-
+/*
+  This method runs by fetching a list of all the current machines connected to the server machine.
+  The respective ports are binded with the mids .
+  This file is currently - /home/anamika/mid1.txt
+  This file needs to be updated if any unplugging of machines takes place
+  or on System reboot.
+  Now this method connects every port to the server and stores the Serial port object
+  thus obtained in a HashMap.
+  Key- MID and value- SerialPort object
+  Ths hashmap object is available throughout the application
+  */
   @Override
   public void contextInitialized(ServletContextEvent e) {
     // do all the tasks that you need to perform just after the server starts
@@ -77,9 +88,7 @@ ServletContext cntxt = e.getServletContext();
                   sp=con.connect(s[0]);
                   hashMap.put(Integer.parseInt(s[1]), sp);
                   
-              } catch (PortInUseException ex) {
-                  Logger.getLogger(MyServletContextListener.class.getName()).log(Level.SEVERE, null, ex);
-              } catch (UnsupportedCommOperationException ex) {
+              } catch (PortInUseException | UnsupportedCommOperationException ex) {
                   Logger.getLogger(MyServletContextListener.class.getName()).log(Level.SEVERE, null, ex);
               }
              cntxt.setAttribute("hashMap", hashMap);

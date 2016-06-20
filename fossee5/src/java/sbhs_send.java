@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 import Comm.Con;
 import Scilab.CallScilab;
@@ -18,8 +12,14 @@ import org.scilab.modules.javasci.JavasciException;
 import org.scilab.modules.javasci.Scilab;
 
 /**
- *
- * @author root
+ * This servlet is responsible for interacting with the hardware and scilab.
+ * mypostvar - setpoint value (From page sbhs.jsp)
+ * mypotsvar1 - fan value 
+ *  con - Connection object 
+ *  sci-Scilab object
+ *  check - connection status
+ *  filename - filename
+ * @author Anamika Modi
  */
 public class sbhs_send extends HttpServlet {
 
@@ -39,7 +39,6 @@ public class sbhs_send extends HttpServlet {
         PrintWriter writer = response.getWriter();
 
     try (PrintWriter out = response.getWriter()) {       
-            String portName=null;
         try
         {	
             String setpoint = request.getParameter("mypostvar");
@@ -47,46 +46,69 @@ public class sbhs_send extends HttpServlet {
             if(setpoint!=null&&fan!=null){
             Integer d1=Integer.parseInt(setpoint);
             Integer d2=Integer.parseInt(fan);
-                System.out.println(d1+" "+d2);
-            Con con=null;int check=0;  
-       try{
+            System.out.println(d1+" "+d2);
+            Con con=null;
+            int check=0;  
+        try{
             con = (Con) request.getSession().getAttribute("con");
             check=(Integer)request.getSession().getAttribute("check");
-       }catch(NullPointerException e){
+            }catch(NullPointerException e){
             System.out.println("session null");
-       }
+          }
             double c=0.0;
+            
             if(check==1){
                 try{
-                      c =con.readTemp();
-                      System.out.println(c);
-                }catch(IOException e){
-                    request.getSession().invalidate();
-                    response.sendRedirect("/fossee5/reload.jsp");
+                        c =con.readTemp();
+                        System.out.println(c);
+                    }catch(IOException e){
+                        request.getSession().invalidate();
+                        response.sendRedirect("/fossee5/reload.jsp");
            return;
                 }
-                
+             /*
+              This scilab object is passed to a class called CallScilab(in scilab package).
+              This class will help us communicate with scilab aand get results from scilab which are then sent
+                to sbhs.
+              */
            
             Scilab sci = (Scilab) request.getSession().getAttribute("sci");
             String filename=(String)request.getSession().getAttribute("filename");
             CallScilab callsci=new CallScilab();
                 System.out.println(filename);
             String b[]=callsci.scilab(d1, d2,c,sci,filename);
-            
-             if(b[1].equals("-1")&&b[1].equals("-1")){
+            /*
+            here the array returned contains output of the function executed in
+            Scilab via the code given by the user.
+            Also it contains a special msg if an error occurs.
+            */
+             if(b[1].equals("-1")&&b[0].equals("-1")){
                writer.write("data::"+b[2]+"::error");
                return;
             }
+             /*
+             This is specific to sbhs .
+             For controlling the value of heat between (0-100)
+             */
             if(Integer.parseInt(b[1])>100){
                 b[1]="100";
             }
             else if(Integer.parseInt(b[1])<0){
                 b[1]="0";
             }
-           
+           /*
+            here the values returned by the user are sent to sbhs.
+            */
             con.set(Integer.parseInt(b[1]),Integer.parseInt(b[0]));
            // writer.write("data:: "+"Temp "+"- "+c+"\n\n"+"Heat"+"- "+b[1]+"\n\n");
+            /*
+            this is where the data that is "data" for the return success call from ajax , is set.
+            cuurently it has - data::temp&heat&fan
+            */
            writer.write("data::"+c+"&"+b[1]+"&"+b[0]);
+           /*
+           the next section is for appending these results to the log file
+           */
             PrintWriter writerfile=(PrintWriter)(request.getSession().getAttribute("writerfile"));
             int count=(int)request.getSession().getAttribute("counter");
             count++;
@@ -104,6 +126,9 @@ public class sbhs_send extends HttpServlet {
             writerfile.append("\n");
 
             System.out.println(System.currentTimeMillis()-session.getCreationTime());
+            /*
+            if the slot time is finished , send done.
+            */
             if(System.currentTimeMillis()-session.getCreationTime()>200000){
                writer.write("::"+"done");
             }
@@ -114,11 +139,9 @@ public class sbhs_send extends HttpServlet {
    }
         catch ( NumberFormatException | IOException | JavasciException e )
         {
-        }
-    
-            
             
         }
+      }
     }
         
 

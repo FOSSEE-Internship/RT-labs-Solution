@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Comm;
 
 import gnu.io.CommPort;
@@ -12,21 +8,24 @@ import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
- *
- * @author root
+ * This class is for making initial connections with the board 
+ * when the server is turned on.
+ * 
+ * @author Anamika Modi
  */
 public class sbhsconnect {
-    
-    
+    /*
+    here the connection is made via portName , where
+    a connection is setup by using open method of the portIdentifier
+    Retuens a Serial Port 
+    */
     public SerialPort connect ( String portName ) throws PortInUseException, UnsupportedCommOperationException, IOException 
     { 
-            SerialPort serialPort=null;
-    	    CommPort commPort=null;
-        CommPortIdentifier portIdentifier=null;
+         SerialPort serialPort=null;
+         CommPort commPort=null;
+         CommPortIdentifier portIdentifier=null;
         try {
             portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
         } catch (NoSuchPortException ex) {
