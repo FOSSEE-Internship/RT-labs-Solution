@@ -51,9 +51,21 @@ public class currSlot extends HttpServlet {
             //us.setacc_id(session);
             database db;
             db = new database();
-           db.adddatetime(us);
+             Integer i=db.chekslot(us);
+            
+             
+               
+            if(i==2)
+            {
+            db.adddatetime(us);
             //us=(request.getSession().getAttribute("user")).get;
-             response.sendRedirect("viewslot");
+            response.sendRedirect("viewslot");
+            }
+            else
+            {
+            response.sendRedirect("noslot.html");
+            System.out.println("slot have been booked for this");
+            }
             out.println("</body>");
             out.println("</html>");
         } finally {
@@ -70,7 +82,6 @@ public class currSlot extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
@@ -84,7 +95,6 @@ public class currSlot extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
@@ -95,7 +105,6 @@ public class currSlot extends HttpServlet {
      *
      * @return a String containing servlet description
      */
-    @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>

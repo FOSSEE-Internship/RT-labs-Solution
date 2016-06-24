@@ -51,10 +51,17 @@ public class slot extends HttpServlet {
             //us.setacc_id(session);
             database db;
             db = new database();
-           db.adddatetime(us);
+          
             //us=(request.getSession().getAttribute("user")).get;
            // out.println("hey hey hey");
+           Integer i=db.chekslot(us);
+           if(i==2){
+                db.adddatetime(us);
             response.sendRedirect("viewslot");
+           }
+           else{
+               response.sendRedirect("noslot.html");
+           }
            // out.println("123hey hey");
             
             out.println("</body>");

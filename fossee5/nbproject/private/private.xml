@@ -3,33 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/WEB-INF/web.xml</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/finish.jsp</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/Scilab/CallScilab.java</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/nbproject/build-impl.xml</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/currSlot.java</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/Comm/sbhsconnect.java</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/web/viewslot.jsp</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/web/viewslot.html</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/web/initres.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/reload.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/savefile.java</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/index.html</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/close.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/Comm/sbhsconnect.java</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/web/noslot.html</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/web/sbhshome.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/charts.html</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/vlab1.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/createnewlog.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/front.js</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/viewslot.jsp</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/web/sbhs.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/signup.html</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/sbhs_send.java</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/fileupload.java</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/slot.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/Comm/Con.java</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/new.html</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/logout.jsp</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/Scilab/CallScilab.java</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/vlab.html</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/web/experiment.jsp</file>
             <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/javalistener/MyServletContextListener.java</file>
-            <file>file:/home/anamika/NetBeansProjects/fossee5/web/index.jsp</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/web/slot.jsp</file>
+            <file>file:/home/anamika/NetBeansProjects/fossee5/src/java/slot.java</file>
         </group>
     </open-files>
 </project-private>

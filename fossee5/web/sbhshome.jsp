@@ -77,7 +77,7 @@
                 <li><a href="http://sbhs.os-hardware.in/downloads" target="_blank">Downloads</a></li>
                 <li><a href="/sbhs/theory">Theory</a></li>
                 <li><a href="/sbhs/procedure">Procedure</a></li>
-                <li><a id='exp' href="initres.jsp">Experiment</a></li>
+                <li><a id='exp' href="experiment.jsp">Experiment</a></li>
                 <li><a href="/sbhs/quiz ">Quiz</a></li>
                 <li><a href="/sbhs/feedback">Feedback / Contact Us</a></li> 
                 <li><a href="/sbhs/about">About Us</a></li>                

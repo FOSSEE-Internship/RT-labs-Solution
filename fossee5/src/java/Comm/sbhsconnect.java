@@ -34,14 +34,8 @@ public class sbhsconnect {
     Double a=0.0;
     
     	
-       if ( portIdentifier.isCurrentlyOwned() )
-        {
-            System.out.println("Error: Port is currently in use"+portIdentifier.getCurrentOwner());
-           
-            return null;
-        }
-        else
-       {
+      
+        
             commPort = portIdentifier.open(this.getClass().getName(),2000);  
             if ( commPort instanceof SerialPort )
             {
@@ -54,7 +48,7 @@ public class sbhsconnect {
             {
                 System.out.println("Error: Only serial ports are handled by this example.");
             }
-        }     
+             
       return serialPort;
     }
 }

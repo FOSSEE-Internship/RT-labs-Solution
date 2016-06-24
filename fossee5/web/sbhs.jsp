@@ -92,6 +92,7 @@ $(window).on('beforeunload', function() {
             * and redirection of pages.
             */
             window.sessionStorage['myUnloadEventFlag']='false';
+            
             return 'bye bye!';
         }
     });
@@ -122,12 +123,16 @@ $(document).keydown(function(e)
 // Wire up the events as soon as the DOM tree is ready
 $(document).ready(function() {
     bindDOMEvents();
-     if(sessionStorage.getItem('myUnloadEventFlag')==='true')
+     if(sessionStorage.getItem('myUnloadEventFlag')==='true'|| sessionStorage.getItem('inexperiment')==='true')
      {
          /*
           * reintialise the resources.
           */
+         //alert('here');
+         sessionStorage.setItem('inexperiment','false');
+         window.sessionStorage['myUnloadEventFlag']='false';
           window.location.href="initres.jsp";
+          
      }
         // flag the page as being unloading
         window.sessionStorage['myUnloadEventFlag']='true';
@@ -397,6 +402,7 @@ $.ajax({
                  * to stop call to start method
                  */
                 clearInterval(myID);
+                window.sessionStorage['inexperiment']='false';
                 /*
                  * this popup will close the current scilab instance
                  * and start a new instance.
@@ -413,6 +419,7 @@ $.ajax({
                  * data::output&output&...::info.
                  */
                    document.getElementById('temp').innerHTML=data.split("::")[1].split("&")[0];
+                   //document.getElementById('temp').innerHTML=data.split("::")[1].split("&")[1];
                    /*
                     * this is done to set unloadflag to true ,indicating presence on
                     * sbhs.jsp
@@ -513,8 +520,9 @@ and starting a new experiment.
  chart area
  -->
  <div id="part" >
-        <div id="charttemp" style="width: 400px;float:left ;height: 300px; margin: 0 auto"></div>
-        <div id="chartheat" style="width: 400px;float:left ; height: 300px; margin: 0 auto"></div>
+     <br>
+        <div id="charttemp" style="width: 390px;float:left ;height: 270px; margin: 0 auto"></div>
+        <div id="chartheat" style="width: 390px;float:left ; height: 270px; margin: 0 auto"></div>
  </div>
  <!--
  this script is for initiating the 
@@ -570,6 +578,7 @@ and starting a new experiment.
              * to prevent unloading on redirection
              */
             window.sessionStorage['myUnloadEventFlag']='false';
+            window.sessionStorage['inexperiment']='true';
             /*
              * start the call of method start at the user-defined iteration rate
              */
@@ -591,6 +600,7 @@ and starting a new experiment.
               */
              var wnd=window.open("createnewlog.jsp","connectWindow", "width=100,height=100,menubar=no");
              window.sessionStorage['myUnloadEventFlag']='false';
+             window.sessionStorage['inexperiment']='false';
              window.location.href="sbhs.jsp";
          });
 </script>

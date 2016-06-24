@@ -20,7 +20,6 @@ writerfile - Printwriter object for current experiment's log file
 <%@page import="java.util.Map"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="java.util.HashMap"%>
 <%@page import="gnu.io.SerialPort"%>
 <%@page import="java.io.FileInputStream"%>
 <%@page import="java.io.InputStream"%>

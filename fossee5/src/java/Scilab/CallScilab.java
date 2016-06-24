@@ -79,6 +79,7 @@ public class CallScilab {
                    b[0]=String.valueOf(c.getIntElement(0,0));
                    b[1]=String.valueOf(d.getIntElement(0,0));
                    b[2]=null;
+                  // sci.close();
                 }
                
          return b;       

@@ -1,6 +1,8 @@
 
 import Comm.Con;
 import Scilab.CallScilab;
+import bean.user;
+import database.database;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -99,7 +101,7 @@ public class sbhs_send extends HttpServlet {
            /*
             here the values returned by the user are sent to sbhs.
             */
-            con.set(Integer.parseInt(b[1]),Integer.parseInt(b[0]));
+             con.set(Integer.parseInt(b[1]),Integer.parseInt(b[0]));
            // writer.write("data:: "+"Temp "+"- "+c+"\n\n"+"Heat"+"- "+b[1]+"\n\n");
             /*
             this is where the data that is "data" for the return success call from ajax , is set.
@@ -124,8 +126,9 @@ public class sbhs_send extends HttpServlet {
             writerfile.append(" ");
             writerfile.append(String.valueOf(System.currentTimeMillis()));
             writerfile.append("\n");
-
-            System.out.println(System.currentTimeMillis()-session.getCreationTime());
+            database db=new database();
+            long epoch=db.getepoch((user)(request.getSession().getAttribute("user")));
+            System.out.println(System.currentTimeMillis()-epoch);
             /*
             if the slot time is finished , send done.
             */

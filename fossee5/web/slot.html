@@ -1,7 +1,5 @@
 
 
-<%@page import="bean.user"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,10 +27,7 @@
     </style>
 </head>
 <body>
-    <%
-    String s=((user)(request.getSession().getAttribute("user"))).getusername();
-    %>
-    <di
+    
     <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -41,7 +36,7 @@
             <ul class="nav pull-right">
                 
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Welcome <%=s%> <b class="caret"></b></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Welcome, sankalp <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                         <li><a href="#passwordModal" role="button" data-toggle="modal">Change Password</a></li>
                         <li><a href="#machineModal" role="button" data-toggle="modal">Request machine change</a></li>
@@ -76,9 +71,9 @@
         <div class="span12">
     <ul class="nav nav-pills">
         <br><br>
-        <li><button type="button" id="home-nav"><a href="sbhshome.jsp">Home</a></button></li>
-        <li><button type="button" id="book-slot-nav"><a href="">Book slot</a></button></li>
-        <li><button type="button" id="view-slot-nav"><a href="viewslot.jsp">View/Delete slot</a></button></li>
+        <li><button type="button" id="home-nav"><a href="/sbhs/home">Home</a></button></li>
+        <li><button type="button" id="book-slot-nav"><a href="slot.html">Book slot</a></button></li>
+        <li><button type="button" id="view-slot-nav"><a href="viewslot.html">View/Delete slot</a></button></li>
         
         </ul>
 </div>
@@ -129,8 +124,8 @@ var showTime = "Current slot "+currTime+"  is vacant";
              
             <form action="currSlot" method="POST"> 
                 <input type='hidden' name='csrfmiddlewaretoken' value='lT7cp7ZiQ4sV1JckSiUiyt8XXAODtAhe' />
-                <input type="hidden" name="currslots" id="currslots" value="20">
-                <input type="hidden" name="currDate" id="currDate" value="CURRENT">
+                <input type='hidden' name="currslots" id="currslots" value="20">
+                <input type='hidden' name="currDate" id="currDate" value="CURRENT">
                  <input type="submit" value="Book now" class="btn btn-primary">
             </form>
             
@@ -147,7 +142,17 @@ var showTime = "Current slot "+currTime+"  is vacant";
                 <div id="slotTimingWrap">
                     <label for="slot">Free slot timings</label>
                     <select name="slot" id="slot">
-       
+                    
+                        <!--<option value="20"></option>
+                    
+                        <option value="21"></option>
+                    
+                        <option value="22"></option>
+                    
+                        <option value="23"></option>
+                    
+                        <option value="24"></option>-->
+                    
                     </select>
                 </div>
                 <br>
@@ -206,7 +211,7 @@ $("#currslots").val(currTime);
 (function(){
     // sankalp_gupta
      let a = new Date();
-     let b = a.getFullYear() + "-0" + (a.getMonth()+1) + "-0" + a.getDate(); // because getMonth starts from zero
+     let b = a.getFullYear() + "-0" + (a.getMonth()+1) + "-" + a.getDate(); // because getMonth starts from zero
      $("#date").val(b);
      $(".alert").alert();
 
@@ -227,27 +232,25 @@ $("#currslots").val(currTime);
                 return date.valueOf() < now.valueOf() ? 'disabled' : '';
         }
     }).on('changeDate', function(ev) {
+        
         var newDate = new Date(ev.date);
         //alert(newDate+" "+nowTemp)
         var string = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate();
         var string_nowTemp=nowTemp.getFullYear() + "-" + (nowTemp.getMonth() + 1) + "-" + nowTemp.getDate();
      //document.getElementById("display").innerHTML=string;
 
-       
+       var select = document.getElementById("slot");
        var limit=0;
        if(string_nowTemp === string){
         limit=d1;
        }
-
-var select = document.getElementById("slot");
     for(var i = 23; i>=limit; i--) {
         var option = document.createElement('option');
-        option.text = option.value = (i+":00---"+i+":55");
+        option.text = option.value = (i+":00 -- "+i+":55");
         select.add(option, 0);
         if(i===limit){
-           // alert(i);
             option.setAttribute('selected','true');
-        } 
+        }
     }
 
       $.ajax({
@@ -257,7 +260,13 @@ var select = document.getElementById("slot");
             }
         })
     }).data('datepicker');
+   /* .onclick('datepicker',function(ev)){
+        
+    
 
+        document.getElementById("option").reset();
+    }
+*/
 
 
     /*var DP2 = $('#dp1').datepicker().onclick(
@@ -269,6 +278,25 @@ var select = document.getElementById("slot");
 })();
 
 </script>
+
+    <br><br><br>
+    <div class="wrapper" style="position: absolute; bottom: 0; right: 0; width: 100%;">
+    <div class="container">
+        <div class="navbar">
+        <ul class="nav pull-right">
+            <li><a href="#"><b>External links</b></a></li>
+            <li><a href="http://www.iitb.ac.in/" target="_blank">IIT Bombay</a></li>
+            <li><a href="http://www.vlab.co.in/" target="_blank">Virtual Labs</a></li>
+            <li><a href="http://www.spoken-tutorial.org/" target="_blank">Spoken Tutorials</a></li>
+            <li><a href="http://www.co-learn.in/" target="_blank">Co-learn</a></li>
+            <li><a href="http://www.nex-robotics.com/" target="_blank">Nex Robotics</a></li>
+            <li><a href="http://sbhs.os-hardware.in/forum" target="_blank">SBHS Forum</a></li>
+            <li><a href="http://www.cdeep.iitb.ac.in/" target="_blank">CDEEP</a></li>
+        </ul>
+        </div>
+        <small style="float: right; font-size: 10px; margin: -8px 10px 2px 0;">Server time: <span id="timer">5th Jun 2016 07:06:36 PM</span>. Copyright &copy; 2014 <a href="www.iitb.ac.in" target="_blank">www.iitb.ac.in</a>. Designed and hosted by <a href="http://www.cdeep.iitb.ac.in/" target="_blank">Automation Lab, CDEEP, IIT Bombay</a></small>
+    </div>
+</div>
 
 <script>
 (function(){

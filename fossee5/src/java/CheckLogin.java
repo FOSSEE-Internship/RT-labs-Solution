@@ -63,7 +63,7 @@ public class CheckLogin extends HttpServlet {
                 
                 HttpSession session=request.getSession(true);
                 session.setAttribute("user",us);
-                int c=db.returnmid(us);
+                int c=db.returnm_id(us);
                int d= db.getaccount(us);
                    
                    us.setacc_id(String.valueOf(d));

@@ -1,3 +1,28 @@
+<%-- 
+    Document   : experiment
+    Created on : 20 Jun, 2016, 8:11:10 PM
+    Author     : sankalp
+--%>
+
+<%@page import="database.database"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="bean.user"%>
+<%@page import ="java.sql.Connection"%>
+<%@page import =" java.sql.DriverManager"%>
+<%@page import =" java.sql.PreparedStatement"%>
+<%@page import =" java.sql.ResultSet"%>
+<%@page import =" java.sql.SQLException"%>
+<%@page import =" java.sql.Statement"%>
+<%@page import =" java.util.logging.Level"%>
+<%@page import =" java.util.logging.Logger"%>
+<%@page import =" java.lang.String"%>
+<%@page import =" java.util.ArrayList"%>
+<%@page import =" java.util.List"%> 
+
+
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
 <!doctype html>
@@ -15,9 +40,6 @@
     <style>
     html { margin: 0; height: 100%; }
     body { padding-top: 70px; position: relative; margin: 0; min-height: 88%; }
-    table, td 
-    {
-    border: 1px solid black;}
     </style>
 </head>
 <body>
@@ -27,17 +49,29 @@
         <div class="container">
             <a href="/sbhs/" class="brand">Single Board Heater System Lab</a>
 
-            <ul class="nav pull-right">
+               <ul class="nav pull-right">
+                     <% 
+                         
+                  user us =(user)((request.getSession()).getAttribute("user"));
+                  String s= us.getusername();
+                %>
+                
+               
+        
                 
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Welcome, sankalp <b class="caret"></b></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Welcome <%=s%> <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                         <li><a href="#passwordModal" role="button" data-toggle="modal">Change Password</a></li>
                         <li><a href="#machineModal" role="button" data-toggle="modal">Request machine change</a></li>
-                        <li><a href="/sbhs/logout">Logout</a></li>
+                        <li><a href="logout.jsp">Logout</a></li>
                     </ul>
                 </li>
+                
+            
                
+                
+                
             </ul>
         </div>
     </div>
@@ -48,7 +82,7 @@
                 <li><a href="http://sbhs.os-hardware.in/downloads" target="_blank">Downloads</a></li>
                 <li><a href="/sbhs/theory">Theory</a></li>
                 <li><a href="/sbhs/procedure">Procedure</a></li>
-                <li><a href="experiment.jsp">Experiments</a></li>
+                <li><a href="">Experiments</a></li>
                 <li><a href="/sbhs/quiz ">Quiz</a></li>
                 <li><a href="/sbhs/feedback">Feedback / Contact Us</a></li> 
                 <li><a href="/sbhs/about">About Us</a></li>                
@@ -60,83 +94,83 @@
     
 
     
+
 <div class="container">
     <div class="row">
-        <div class="span12">
-    <ul class="nav nav-pills">
-        <li><button id="home-nav"><a href="/sbhs/home">Home</a></button></li>
-        <li><button id="book-slot-nav"><a href="/sbhs/slot/new">Book slot</a></button></li>
-        <li><button id="view-slot-nav"><a href="/sbhs/slot">View/Delete slot</a></button></li>
-        <li><button id="download-log-nav"><a href="/sbhs/experiment/logs">Download log files</a></button></li>
-        <li><button id="video-nav"><a href="/sbhs/show_video">Show video</a></li>
-        </ul>
-</div>
-
-        <script>
-      document.getElementById("view-slot-nav").classList.add("active");
-        </script>
-        
-      
-                     
-   
-    <script>
-function myFunction() {
-    List<String> stime= new ArrayList<String>(); 
-     
- //      for(int i=0;i<stime.size();i++){
-    //     System.out.println(stime.get(i));
-     
-    user us=(user)(request.getSession().getAttribute("user"));
-            //us.setacc_id(session);
-            database db;
-            db = new database();
-            stime=db.userdetails(us);
-        for(int i=0;i<stime.size();i++)
-            {
-                //System.out.println(stime.get(i));
-           
-          
-    var table = document.getElementById("myTable");
-    var row = table.insertRow(0);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    cell1.innerHTML = stime.get(i);
-    cell2.innerHTML = "";
-    
-            }}
-          //  us.setdate(x);
-
-  
-        </script>
-            
         
         <div class="span12">
-        <h3>Your booked slots</h3>
-<table id="myTable">
-  <tr>
-    <td>Row1 cell1</td>
-    <td>Row1 cell2</td>
-  </tr>
-  <tr>
-    <td>Row2 cell1</td>
-    <td>Row2 cell2</td>
-  </tr>
-  <tr>
-    <td>Row3 cell1</td>
-    <td>Row3 cell2</td>
-  </tr>
-</table>
-        <button onclick="myFunction()">Try it</button>
+            <h2>Experiments</h2>            
+                <br>
+		<br>
+		<p><h4>
+                	<strong>List of experiments:</strong>
+                </h4>
+                    <p>
+                        <ol>
+                            <li>Identification of Transfer Function of a Single Board Heater System through Step Response
 
+Experiment</li>
+                            <li>Identification of Transfer Function of a Single Board Heater System through Ramp Response
 
-        
-        <!--<td><a class="btn btn-disabled" disabled="disabled">Delete</a></td>
-  -->
+Experiment</li>
+                            <li>Frequency Response Analysis of a Single Board Heater System by the Application of Sine Wave</li>
+                            <li>Controlling Single Board Heater System using PID controller</li>
+                            <li>Two Degrees of Freedom (2­DOF) Controller</li>
+                            <li>PRBS Modeling and Implementation of Pole Placement Controller</li>
+                            <li>Implementing Internal Model Controller for First Order System on a Single Board Heater System</li>
+                            <li>Design and Implementation of Self Tuning PI and PID Controllers on Single Board Heater System</li>
+                            <li>Model Predictive Control in Single Board Heater System using SCILAB</li> 
+                        </ol>
+                    </p></p>
         </div>
     </div>
-</div>
+    
+   
+</div>                
+<div>
+    <form >  
+     
+        <table  width="20%" bgcolor="00A6FF" align="center"><br><br>
+            <td><input type="radio" id="open" name ="open" value="Open">Open Loop
+        <input type="radio" id="close" name ="close" value="Close Loop">Close Loop<br>
+        <br>        
+        
+                              <button onclick="Proceed()">Proceed</button>
 
+
+        </td>
+        </table>
+
+        </form>
+</div>
     <br><br><br>
+
+<%
+        
+            database db;
+            db = new database();
+            db.getdatetime(us);
+            db.getepoch(us);
+            Integer i=db.enterslot(us);
+           
+        %>
+    <script>
+      
+   function Proceed()
+   {
+      // alert('here');
+   var proceed=<%=i%>;
+   //alert(proceed);
+   if(proceed == 1)
+    window.open('initres.jsp');
+   else
+    window.open('initres.jsp');
+       
+}
+    </script>
+         
+         
+         
     <div class="wrapper" style="position: absolute; bottom: 0; right: 0; width: 100%;">
     <div class="container">
         <div class="navbar">
@@ -151,13 +185,13 @@ function myFunction() {
             <li><a href="http://www.cdeep.iitb.ac.in/" target="_blank">CDEEP</a></li>
         </ul>
         </div>
-        <small style="float: right; font-size: 10px; margin: -8px 10px 2px 0;">Server time: <span id="timer">9th Jun 2016 12:47:16 PM</span>. Copyright &copy; 2014 <a href="www.iitb.ac.in" target="_blank">www.iitb.ac.in</a>. Designed and hosted by <a href="http://www.cdeep.iitb.ac.in/" target="_blank">Automation Lab, CDEEP, IIT Bombay</a></small>
+        <small style="float: right; font-size: 10px; margin: -8px 10px 2px 0;">Server time: <span id="timer">16th Jun 2016 05:19:44 PM</span>. Copyright &copy; 2014 <a href="www.iitb.ac.in" target="_blank">www.iitb.ac.in</a>. Designed and hosted by <a href="http://www.cdeep.iitb.ac.in/" target="_blank">Automation Lab, CDEEP, IIT Bombay</a></small>
     </div>
 </div>
 
 <script>
 (function(){
-    var date_string = "2016-06-09 12:47:16";
+    var date_string = "2016-06-16 17:19:44";
     var a = date_string.split(/[^0-9]/);
     for(i=0;i<6;i++){a[i]=parseInt(a[i])}
     window.date = new Date(a[0],a[1]-1,a[2],a[3],a[4],a[5]);
@@ -184,34 +218,6 @@ function myFunction() {
 </script>
 
     
-<div class="modal hide fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Change Password</h3>
-    </div>
-    <div class="modal-body">
-        <p>Please click following button to send password change link to your email address.</p>
-    </div>
-    <div class="modal-footer">
-        <a data-dismiss="modal" aria-hidden="true" class="btn">Close</a>
-        <a href="/sbhs/password" class="btn btn-primary">Send password change link</a>
-    </div>
-</div>
-
-
-<div class="modal hide fade" id="machineModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Machine change</h3>
-    </div>
-    <div class="modal-body">
-        <p>Please send an email to rupakrokade@iitb.ac.in stating the reasons why machine change is required.</p>
-    </div>
-    <div class="modal-footer">
-        <a data-dismiss="modal" aria-hidden="true" class="btn">Close</a>
-    </div>
-</div>
-
     <script>
     $(".alert").alert();
     </script>

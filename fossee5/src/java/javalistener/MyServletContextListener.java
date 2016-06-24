@@ -12,9 +12,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -27,26 +33,19 @@ import javax.servlet.ServletContextListener;
  * @author Anamika Modi
  */
 public class MyServletContextListener implements ServletContextListener {
-
+private ScheduledExecutorService scheduler;
+List<Object> l=new ArrayList<Object>();
   @Override
   /*
   This method is started when server is closed .
   This method will close all the open ports 
   */
   public void contextDestroyed(ServletContextEvent e) {
-    //Notification that the servlet context is about to be shut down.
-      ServletContext cntxt = e.getServletContext();
-      HashMap<Integer,SerialPort> hashMap=(HashMap)cntxt.getAttribute("hashMap");
-      Iterator it = hashMap.entrySet().iterator();
-    while (it.hasNext()) {
-        Map.Entry pair = (Map.Entry)it.next();
-        System.out.println(pair.getKey() + " = " + pair.getValue());
-        SerialPort s=(SerialPort)(pair.getValue());
-        s.close();
-        System.out.println("port closed");
-        it.remove(); // avoids a ConcurrentModificationException
-    }
-    cntxt.removeAttribute("hashMap");
+    // Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+
+    scheduler.shutdownNow();
+      System.out.println(scheduler.isShutdown());
+    
    System.out.println("end");
   }
 /*
@@ -62,8 +61,22 @@ public class MyServletContextListener implements ServletContextListener {
   */
   @Override
   public void contextInitialized(ServletContextEvent e) {
-    // do all the tasks that you need to perform just after the server starts
-ServletContext cntxt = e.getServletContext();
+    scheduler = Executors.newSingleThreadScheduledExecutor();
+     scheduler.scheduleAtFixedRate(new sch(e),2, 1500, TimeUnit.SECONDS);
+       scheduler.scheduleWithFixedDelay(new ccg(e), 1507, 1500, TimeUnit.SECONDS);
+      
+           
+  }
+
+      class sch implements Runnable{
+      ServletContextEvent e=null;
+        
+        sch(ServletContextEvent e){
+            this.e=e;
+        }
+        @Override
+        public void run() {
+            ServletContext cntxt = e.getServletContext();
     //Notification that the web application initialization process is starting
       System.out.println("started");
       File initialFile = new File("/home/anamika/mid1.txt");
@@ -86,11 +99,13 @@ ServletContext cntxt = e.getServletContext();
              SerialPort sp = null;
               try {
                   sp=con.connect(s[0]);
-                  hashMap.put(Integer.parseInt(s[1]), sp);
-                  
-              } catch (PortInUseException | UnsupportedCommOperationException ex) {
+              } catch (UnsupportedCommOperationException ex) {
                   Logger.getLogger(MyServletContextListener.class.getName()).log(Level.SEVERE, null, ex);
+              } catch (PortInUseException ex) {
+                  return ;
               }
+              hashMap.put(Integer.parseInt(s[1]), sp);
+              
              cntxt.setAttribute("hashMap", hashMap);
               System.out.println("here"+hashMap);
           }
@@ -99,17 +114,43 @@ ServletContext cntxt = e.getServletContext();
           Logger.getLogger(MyServletContextListener.class.getName()).log(Level.SEVERE, null, ex);
       }
            System.out.println(portName);
-           
-  }
-
-    class sch implements Runnable{
-      ServletContextEvent e=null;
-        @Override
-        public void run() {
-            
+           try {
+              this.finalize();
+          } catch (Throwable ex) {
+              Logger.getLogger(MyServletContextListener.class.getName()).log(Level.SEVERE, null, ex);
+          }
             
         }
     }
-
+class ccg implements Runnable{
+      ServletContextEvent e=null;
+        
+        ccg(ServletContextEvent e){
+            this.e=e;
+        }
+        @Override
+        public void run() {
+              System.out.println("end");
+            ServletContext cntxt = e.getServletContext();
+      HashMap<Integer,SerialPort> hashMap=(HashMap)cntxt.getAttribute("hashMap");
+      Iterator it = hashMap.entrySet().iterator();
+    while (it.hasNext()) {
+        Map.Entry pair = (Map.Entry)it.next();
+        System.out.println(pair.getKey() + " = " + pair.getValue());
+        SerialPort s=(SerialPort)(pair.getValue());
+        s.close();
+        System.out.println("port closed");
+        it.remove(); // avoids a ConcurrentModificationException
+    }
+    cntxt.removeAttribute("hashMap");
+ 
+          try {
+              this.finalize();
+          } catch (Throwable ex) {
+              Logger.getLogger(MyServletContextListener.class.getName()).log(Level.SEVERE, null, ex);
+          }
+            
+        }
+    }
 }
 
