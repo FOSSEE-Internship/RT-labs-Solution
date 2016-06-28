@@ -13,7 +13,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,19 +40,18 @@ public class sbhs1 extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, InterruptedException, Exception {
        response.setContentType("text/event-stream;charset=UTF-8");
        PrintWriter out = response.getWriter();
         
-        try {
-            
+       
+           
             /* TODO output your page here. You may use following sample code. */
         
            
              
             String portName=null;
-        try
-        {
+        
         	 try {
         		// String target1 ="sudo -i rm -f /var/lock/LCK*";
                  String target2 = "/home/anamika/test.sh";
@@ -73,49 +75,36 @@ public class sbhs1 extends HttpServlet {
          } catch (Throwable t) {
                  t.printStackTrace();
          }
-               Con c=new Con();
-            
-          for(int i=0;i<1;i++){
+               
+          
              
-           String fan = request.getParameter("mypostvar");
-            String heat = request.getParameter("mypostvar1");
-              double a=0.0;
-              if(fan!=null&&heat!=null){
-            a=c.connect(portName,Integer.parseInt(heat),Integer.parseInt(fan));
-                  System.out.println(a+"yahan ");
+           String info = request.getParameter("info");
+           if(info!=null){
+               Con c=new Con();
+            c.connect(portName);
+           String arr=info.substring(1,info.length()-1);
+           String split[]=arr.split(",");
+                 ArrayList<Integer> a=new ArrayList<Integer>();
+                 for(int i=0;i<split.length;i++){
+                     a.add(Integer.parseInt(split[i]));
+                 }
+                 c.set(a);
                    PrintWriter writer = response.getWriter();
-                   if(a!=0.0)
-            writer.write("data: "+a+"\n\n");
-                   
+                  ArrayList<Double> output=c.read();
+                  String op="";
+                  for(int i=0;i<output.size();i++){
+                      op+=output.get(i)+":";
+                  }
+            writer.write(op+"\n\n");
+            c.disconnect();
+                   writer.close();
               }
+    }
             
           
             
-             Thread.sleep(1000);
-          }
-            
-            
-            
-                 
-                 
-            
-          // request.setAttribute("name", c.arr);
-            
-            
-        }
-        catch ( Exception e )
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    
-            
-            
-        } finally {
-            out.close();
-        }
-    }
-     
+             
+          
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -130,7 +119,13 @@ public class sbhs1 extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
-        processRequest(request, response);
+      
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(sbhs1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
     }
 
@@ -145,8 +140,13 @@ public class sbhs1 extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+       
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(sbhs1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+}
 
     /**
      * Returns a short description of the servlet.
